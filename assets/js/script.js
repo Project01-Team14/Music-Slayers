@@ -22,13 +22,13 @@ var getMusicData = function(searchCriteria, selectedBtn) {
         .then(function(response) {
             // if "Songs" radio button is selected, get tracks data
             if (selectedBtn === "Songs") {
-                searchBySongs(response);
+                console.log(response.data[0].title);
             // if "Artists" selected, get artists data
             } else if (selectedBtn === "Artists") {
-                searchByArtists(response);
-                // if "Albums" selected, get artists data
+                console.log(response.data[0].artist);
+            // if "Albums" selected, get artists data
             } else if (selectedBtn === "Albums") {
-                searchByAlbums(response);
+                console.log(response.data[0].album);
             // if nothing selected, show error
             } else {
                 console.log("error");
@@ -37,27 +37,9 @@ var getMusicData = function(searchCriteria, selectedBtn) {
         // if error show the error
         .catch(err => console.error(err));    
 }
-// display functions if "Songs" is selected
-var searchBySongs = function(response) {
-    for(var i=0; i < 10; i++) {
-        console.log(response.data[i].title);
-    } 
-}
-// display functions if "Artists" is selected
-var searchByArtists= function(response) {
-    for(var i=0; i < 10; i++) {
-        console.log(response.data[i].artist);
-    }
-}
-// display functions if "Albums" is selected
-var searchByAlbums= function(response) {
-    for(var i=0; i < 10; i++) {
-        console.log(response.data[i].album);
-    }
-}
-//create elements inside the for loop
-for(var i=0
-//Add click event listener function
+
+
+
 buttonEl.addEventListener("click", function(event) {
     event.preventDefault();
     // get user's search criteria
