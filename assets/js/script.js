@@ -5,13 +5,8 @@ var songsEl = document.querySelector(".songs");
 var artistEl = document.querySelector(".artists");
 var albumEl = document.querySelector(".album");
 
-
-
-
-
-var getMusicData = function() {
-  
-
+var getMusicData = function(searchCriteria, selectedBtn) {
+    // set options to fetch url
     const options = {
         method: 'GET',
         headers: {
@@ -19,17 +14,82 @@ var getMusicData = function() {
             'X-RapidAPI-Key': '6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d'
         }
     };
-    
-    fetch('https://deezerdevs-deezer.p.rapidapi.com/search?q=one%20more%20time', options)
+
+    // get data by fetching deezer url using user's criteria
+    fetch('https://deezerdevs-deezer.p.rapidapi.com/search?q=' + searchCriteria, options)
         .then(response => response.json())
-        .then(response => console.log(response))
-        .catch(err => console.error(err));   
+        // get data
+        .then(function(response) {
+            // if "Songs" radio button is selected, get tracks data
+            if (selectedBtn === "Songs") {
+                console.log(response.data[0].title);
+            // if "Artists" selected, get artists data
+            } else if (selectedBtn === "Artists") {
+                console.log(response.data[0].artist);
+            // if "Albums" selected, get artists data
+            } else if (selectedBtn === "Albums") {
+                console.log(response.data[0].album);
+            // if nothing selected, show error
+            } else {
+                console.log("error");
+            }
+        })
+        // if error show the error
+        .catch(err => console.error(err));    
 }
 
 
-buttonEl.addEventListener("click", function() {
+
+buttonEl.addEventListener("click", function(event) {
+    event.preventDefault();
+    // get user's search criteria
     var searchCriteria = searchEl.value;
       console.log(searchCriteria);
+    
+    // select all radio buttons
+    var radioButtons = document.querySelectorAll("input[name='lyrics']");
+    var selectedBtn = "";
 
-      
+    // search for radio button user selected
+    for (var i of radioButtons) {
+        // if button is checked, get its value
+        if (i.checked) {
+            selectedBtn = i.value;
+            getMusicData(searchCriteria, selectedBtn);
+            break;
+        }
+    }
+    console.log(selectedBtn);
 });
+
+
+
+
+// genius song lyrics glavier ("https://rapidapi.com/Glavier/api/genius-song-lyrics1/")
+
+// const options = {
+//     method: 'GET',
+//     headers: {
+//         'X-RapidAPI-Host': 'genius-song-lyrics1.p.rapidapi.com',
+//         'X-RapidAPI-Key': '6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d'
+//     }
+// };
+
+// fetch('https://genius-song-lyrics1.p.rapidapi.com/search?q=Alan%20Walker&per_page=10&page=1', options)
+//     .then(response => response.json())
+//     .then(response => console.log(response))
+//     .catch(err => console.error(err));
+
+// // need song id for below function ("https://rapidapi.com/Glavier/api/genius-song-lyrics1/")
+// const options = {
+//     method: 'GET',
+//     headers: {
+//         'X-RapidAPI-Host': 'genius-song-lyrics1.p.rapidapi.com',
+//         'X-RapidAPI-Key': '6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d'
+//     }
+// };
+
+// fetch('https://genius-song-lyrics1.p.rapidapi.com/songs/2396871/lyrics', options)
+//     .then(response => response.json())
+//     .then(response => console.log(response))
+//     .catch(err => console.error(err));
