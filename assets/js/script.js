@@ -22,13 +22,13 @@ var getMusicData = function(searchCriteria, selectedBtn) {
         .then(function(response) {
             // if "Songs" radio button is selected, get tracks data
             if (selectedBtn === "Songs") {
-                console.log(response.data[0].title);
+                searchBySong(response);
             // if "Artists" selected, get artists data
             } else if (selectedBtn === "Artists") {
-                console.log(response.data[0].artist);
+                searchByArtists(response);
             // if "Albums" selected, get artists data
             } else if (selectedBtn === "Albums") {
-                console.log(response.data[0].album);
+                searchByAlbums(response);
             // if nothing selected, show error
             } else {
                 console.log("error");
@@ -37,9 +37,25 @@ var getMusicData = function(searchCriteria, selectedBtn) {
         // if error show the error
         .catch(err => console.error(err));    
 }
-
-
-
+// search by "Songs"
+var searchBySong = function(response) {
+    for (var i=0; i<10; i++) {
+        console.log(response.data[i].title);
+    }
+}
+// search by "Artists"
+var searchByArtists = function(response) {
+    for (var i=0; i<10; i++) {
+        console.log(response.data[i].artist);
+    }
+}
+// search by "Albums"
+var searchByAlbums = function(response) {
+    for (var i=0; i<10; i++) {
+        console.log(response.data[i].album);
+    }
+}
+//Add event listener button
 buttonEl.addEventListener("click", function(event) {
     event.preventDefault();
     // get user's search criteria
