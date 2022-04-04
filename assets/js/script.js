@@ -4,6 +4,8 @@ var buttonEl = document.querySelector(".btn");
 var songsEl = document.querySelector(".songs");
 var artistEl = document.querySelector(".artists");
 var albumEl = document.querySelector(".album");
+var searchCriteria = "";
+var data = "";
 
 var getMusicData = function(searchCriteria, selectedBtn) {
     // set options to fetch url
@@ -37,30 +39,77 @@ var getMusicData = function(searchCriteria, selectedBtn) {
         // if error show the error
         .catch(err => console.error(err));    
 }
+
 // search by "Songs"
 var searchBySong = function(response) {
-    for (var i=0; i<10; i++) {
-        console.log(response.data[i].title);
+    for (var i = 0; i < 10; i++) {
+        data = response.data[i];
+        var title = data.title.normalize;
+
+        if (title.match(searchCriteria)) {
+            // $("#display-container")
+            console.log(data);
+            console.log(data.album.cover_small);
+            console.log(data.album.title);
+            console.log(data.title);
+            console.log(data.artist.name);
+            console.log(data.artist.picture_small);
+            console.log(data.preview);
+        } else {
+            console.log("not the one");
+        }
     }
 }
+
 // search by "Artists"
 var searchByArtists = function(response) {
-    for (var i=0; i<10; i++) {
-        console.log(response.data[i].artist);
+    for (var i = 0; i < 10; i++) {
+        data = response.data[i];
+        var artist = data.artist.name;
+        console.log(artist);
+        
+        if (artist.match(searchCriteria)) {
+            console.log(data);
+            console.log(data.album.cover_small);
+            console.log(data.album.title);
+            console.log(data.title);
+            console.log(data.artist.name);
+            console.log(data.artist.picture_small);
+            console.log(data.preview);
+        } else {
+            console.log("not the one");
+        }
     }
 }
+
 // search by "Albums"
 var searchByAlbums = function(response) {
-    for (var i=0; i<10; i++) {
-        console.log(response.data[i].album);
+    for (var i = 0; i < 10; i++) {
+        data = response.data[i];
+        var album = data.album.title;
+
+        if (album.match(searchCriteria)) {
+            console.log(data);
+            console.log(data.album.cover_small);
+            console.log(data.album.title);
+            console.log(data.title);
+            console.log(data.artist.name);
+            console.log(data.artist.picture_small);
+            console.log(data.preview);
+        } else {
+            console.log("not the one");
+        }
+
     }
 }
+
 //Add event listener button
 buttonEl.addEventListener("click", function(event) {
     event.preventDefault();
     // get user's search criteria
-    var searchCriteria = searchEl.value;
-      console.log(searchCriteria);
+    searchCriteria = searchEl.value;
+    searchCriteria = searchCriteria.charAt(0).toUpperCase() + searchCriteria.slice(1);
+    console.log(searchCriteria);
     
     // select all radio buttons
     var radioButtons = document.querySelectorAll("input[name='lyrics']");
