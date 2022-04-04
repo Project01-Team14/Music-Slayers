@@ -154,6 +154,7 @@ var createSongList = function(data) {
         .html("Lyrics");
     var playBtnEl = $("<button>")
         .attr("type", "button")
+        .attr("data-play", data.preview)
         .addClass("play-btn")
         .html("Play");
 
@@ -163,7 +164,6 @@ var createSongList = function(data) {
 
     console.log(data);
     console.log(data.artist.picture_small);
-    console.log(data.preview);
 }
 
 //Add event listener button
@@ -189,6 +189,27 @@ buttonEl.addEventListener("click", function(event) {
     console.log(selectedBtn);
 });
 
+
+$("#display-container").on("click", ".play-btn", function() {
+    var audioSrc = $(this).attr("data-play");
+    var audio = new Audio(audioSrc);
+    
+    console.log(audioSrc);
+    audio.play();
+
+    $(this).text("Pause");
+    $(this).addClass("pause-btn");
+    $(this).removeClass("play-btn");
+
+    $("#display-container").on("click", ".pause-btn", function() {
+        audio.pause();
+        console.log(audioSrc);
+
+        $(this).text("Play");
+        $(this).addClass("play-btn");
+        $(this).removeClass("pause-btn");    
+    });
+});
 
 
 
