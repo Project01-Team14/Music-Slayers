@@ -4,6 +4,10 @@ var buttonEl = document.querySelector(".btn");
 var songsEl = document.querySelector(".songs");
 var artistEl = document.querySelector(".artists");
 var albumEl = document.querySelector(".album");
+var searchCriteria = "";
+var selectedBtn = "";
+var data = "";
+var resultsEl = "";
 
 var getMusicData = function(searchCriteria, selectedBtn) {
     // set options to fetch url
@@ -37,34 +41,141 @@ var getMusicData = function(searchCriteria, selectedBtn) {
         // if error show the error
         .catch(err => console.error(err));    
 }
+
 // search by "Songs"
 var searchBySong = function(response) {
-    for (var i=0; i<10; i++) {
-        console.log(response.data[i].title);
+    if ($(".results-container") !== null) {
+        $(".results-container").detach();
+    }
+
+    resultsEl = $("<div>")
+        .addClass("results-container");
+
+    for (var i = 0; i < 10; i++) {
+        data = response.data[i];
+
+        if (data.title.match(searchCriteria)) {
+            createSongList(data, resultsEl);
+        } else {
+            console.log("not the one");
+        }
+    }
+
+    $("#display-container").append(resultsEl);
+
+    var checkElement = document.querySelector(".song-list");
+    console.log(checkElement);
+
+    if (checkElement) {
+        $("#result-subtitle").html("Showing results for: " + searchCriteria + " (" + selectedBtn + ")");
+    } else {
+        $("#result-subtitle").html("No results found for: " + searchCriteria + " (" + selectedBtn + ")");
     }
 }
+
 // search by "Artists"
 var searchByArtists = function(response) {
-    for (var i=0; i<10; i++) {
-        console.log(response.data[i].artist);
+    if ($(".results-container") !== null) {
+        $(".results-container").detach();
+    }
+
+    resultsEl = $("<div>")
+        .addClass("results-container");
+
+    for (var i = 0; i < 10; i++) {
+        data = response.data[i];
+        
+        if (data.artist.name.match(searchCriteria)) {
+            createSongList(data);
+        } else {
+            console.log("not the one");
+        }
+    }
+
+    $("#display-container").append(resultsEl);
+
+    var checkElement = document.querySelector(".song-list");
+
+    if (checkElement) {
+        $("#result-subtitle").html("Showing results for: " + searchCriteria + " (" + selectedBtn + ")");
+    } else {
+        $("#result-subtitle").html("No results found for: " + searchCriteria + " (" + selectedBtn + ")");
     }
 }
+
 // search by "Albums"
 var searchByAlbums = function(response) {
-    for (var i=0; i<10; i++) {
-        console.log(response.data[i].album);
+    if ($(".results-container") !== null) {
+        $(".results-container").detach();
+    }
+
+    resultsEl = $("<div>")
+        .addClass("results-container");
+
+    for (var i = 0; i < 10; i++) {
+        data = response.data[i];
+
+        if (data.album.title.match(searchCriteria)) {
+            createSongList(data);
+        } else {
+            console.log("not the one");
+        }
+    }
+
+    $("#display-container").append(resultsEl);
+
+    var checkElement = document.querySelector(".song-list");
+
+    if (checkElement) {
+        $("#result-subtitle").html("Showing results for: " + searchCriteria + " (" + selectedBtn + ")");
+    } else {
+        $("#result-subtitle").html("No results found for: " + searchCriteria + " (" + selectedBtn + ")");
     }
 }
+
+var createSongList = function(data, resultsEl) {
+    var listEl = $("<ul>")
+        .addClass("song-list");
+    var listItemEl = $("<li>")
+        .addClass("song-item");
+
+    var albumImageEl = $("<img>")
+        .attr("src", data.album.cover_small)
+        .attr("alt", data.artist.name + "'s album " + data.album.title);
+    var songTitleEl = $("<h3>")
+        .addClass("song-title")
+        .html(data.title);
+    var otherInfoEl = $("<p>")
+        .addClass("song-info")
+        .html(data.artist.name + " - " + data.album.title);
+    var lyricsBtnEl = $("<button>")
+        .attr("type", "button")
+        .addClass("lyrics-btn")
+        .html("Lyrics");
+    var playBtnEl = $("<button>")
+        .attr("type", "button")
+        .attr("data-play", data.preview)
+        .addClass("play-btn")
+        .html("Play");
+
+    listItemEl.append(albumImageEl, songTitleEl, otherInfoEl, lyricsBtnEl, playBtnEl);
+    listEl.append(listItemEl);
+    resultsEl.append(listEl);
+
+    console.log(data);
+    console.log(data.artist.picture_small);
+}
+
 //Add event listener button
 buttonEl.addEventListener("click", function(event) {
     event.preventDefault();
     // get user's search criteria
-    var searchCriteria = searchEl.value;
-      console.log(searchCriteria);
+    searchCriteria = searchEl.value;
+    searchCriteria = searchCriteria.charAt(0).toUpperCase() + searchCriteria.slice(1);
+    console.log(searchCriteria);
     
     // select all radio buttons
     var radioButtons = document.querySelectorAll("input[name='lyrics']");
-    var selectedBtn = "";
 
     // search for radio button user selected
     for (var i of radioButtons) {
@@ -78,6 +189,27 @@ buttonEl.addEventListener("click", function(event) {
     console.log(selectedBtn);
 });
 
+
+$("#display-container").on("click", ".play-btn", function() {
+    var audioSrc = $(this).attr("data-play");
+    var audio = new Audio(audioSrc);
+    
+    console.log(audioSrc);
+    audio.play();
+
+    $(this).text("Pause");
+    $(this).addClass("pause-btn");
+    $(this).removeClass("play-btn");
+
+    $("#display-container").on("click", ".pause-btn", function() {
+        audio.pause();
+        console.log(audioSrc);
+
+        $(this).text("Play");
+        $(this).addClass("play-btn");
+        $(this).removeClass("pause-btn");    
+    });
+});
 
 
 
