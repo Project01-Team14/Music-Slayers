@@ -51,12 +51,11 @@ var searchBySong = function(response) {
     resultsEl = $("<div>")
         .addClass("results-container");
 
-
     for (var i = 0; i < 10; i++) {
         data = response.data[i];
 
         if (data.title.match(searchCriteria)) {
-            createSongList(data);
+            createSongList(data, resultsEl);
         } else {
             console.log("not the one");
         }
@@ -65,6 +64,7 @@ var searchBySong = function(response) {
     $("#display-container").append(resultsEl);
 
     var checkElement = document.querySelector(".song-list");
+    console.log(checkElement);
 
     if (checkElement) {
         $("#result-subtitle").html("Showing results for: " + searchCriteria + " (" + selectedBtn + ")");
@@ -133,7 +133,7 @@ var searchByAlbums = function(response) {
     }
 }
 
-var createSongList = function(data) {
+var createSongList = function(data, resultsEl) {
     var listEl = $("<ul>")
         .addClass("song-list");
     var listItemEl = $("<li>")
