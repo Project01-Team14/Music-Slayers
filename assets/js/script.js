@@ -81,15 +81,15 @@ buttonEl.addEventListener("click", function(event) {
 // Genius song lyrics Glavier ("https://rapidapi.com/Glavier/api/genius-song-lyrics1/")
 
 // set options to fetch url
-const options = {
+const lyricsApi = {
 	method: 'GET',
 	headers: {
 		'X-RapidAPI-Host': 'genius-song-lyrics1.p.rapidapi.com',
-		'X-RapidAPI-Key': 'SIGN-UP-FOR-KEY'
+		'X-RapidAPI-Key': '8953cc16a8msh362e3da83f41059p119f26jsn264a41186942'
 	}
 };
-// get data by fetching Genuis songs url using user's criteria
-fetch('https://genius-song-lyrics1.p.rapidapi.com/search?q=Alan%20Walker&per_page=10&page=1', options)
+
+fetch('https://genius-song-lyrics1.p.rapidapi.com/songs/2396871/lyrics', lyricsApi)
 	.then(response => response.json())
 	.then(response => console.log(response))
 	.catch(err => console.error(err));
