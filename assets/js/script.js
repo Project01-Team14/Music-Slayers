@@ -78,34 +78,18 @@ buttonEl.addEventListener("click", function(event) {
     console.log(selectedBtn);
 });
 
+// Genius song lyrics Glavier ("https://rapidapi.com/Glavier/api/genius-song-lyrics1/")
 
-
-
-// genius song lyrics glavier ("https://rapidapi.com/Glavier/api/genius-song-lyrics1/")
-
-// const options = {
-//     method: 'GET',
-//     headers: {
-//         'X-RapidAPI-Host': 'genius-song-lyrics1.p.rapidapi.com',
-//         'X-RapidAPI-Key': '6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d'
-//     }
-// };
-
-// fetch('https://genius-song-lyrics1.p.rapidapi.com/search?q=Alan%20Walker&per_page=10&page=1', options)
-//     .then(response => response.json())
-//     .then(response => console.log(response))
-//     .catch(err => console.error(err));
-
-// // need song id for below function ("https://rapidapi.com/Glavier/api/genius-song-lyrics1/")
-// const options = {
-//     method: 'GET',
-//     headers: {
-//         'X-RapidAPI-Host': 'genius-song-lyrics1.p.rapidapi.com',
-//         'X-RapidAPI-Key': '6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d'
-//     }
-// };
-
-// fetch('https://genius-song-lyrics1.p.rapidapi.com/songs/2396871/lyrics', options)
-//     .then(response => response.json())
-//     .then(response => console.log(response))
-//     .catch(err => console.error(err));
+// set options to fetch url
+const options = {
+	method: 'GET',
+	headers: {
+		'X-RapidAPI-Host': 'genius-song-lyrics1.p.rapidapi.com',
+		'X-RapidAPI-Key': 'SIGN-UP-FOR-KEY'
+	}
+};
+// get data by fetching Genuis songs url using user's criteria
+fetch('https://genius-song-lyrics1.p.rapidapi.com/search?q=Alan%20Walker&per_page=10&page=1', options)
+	.then(response => response.json())
+	.then(response => console.log(response))
+	.catch(err => console.error(err));
