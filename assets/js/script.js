@@ -86,7 +86,7 @@ var searchByArtists = function(response) {
         data = response.data[i];
         
         if (data.artist.name.match(searchCriteria)) {
-            createSongList(data);
+            createSongList(data, resultsEl);
         } else {
             console.log("not the one");
         }
@@ -116,7 +116,7 @@ var searchByAlbums = function(response) {
         data = response.data[i];
 
         if (data.album.title.match(searchCriteria)) {
-            createSongList(data);
+            createSongList(data, resultsEl);
         } else {
             console.log("not the one");
         }
