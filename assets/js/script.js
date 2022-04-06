@@ -6,8 +6,8 @@ var albumEl = document.querySelector(".album");
 var searchCriteria = "";
 var selectedBtn = "";
 var data = "";
-var resultsEl = "";
 var songPreview = "";
+var listEl = "";
 
 // fetch data from spotify
 var getSearch = function (searchCriteria) {
@@ -35,8 +35,6 @@ var getSearch = function (searchCriteria) {
     // if error show the error
     .catch((err) => console.error(err));
 };
-
-// getSearch("Beyonce");
 
 // fetch data from deezer
 var getMusicData = function (search, artist) {
@@ -94,10 +92,9 @@ var searchBySong = function (response) {
     $(".results-container").detach();
   }
 
-  resultsEl = $("<div>").addClass("results-container");
-
-  for (var i = 0; i < response.tracks.items.length; i++) {
-    data = response.tracks.items[i].data;
+  var listEl = $("<ul>").addClass("song-list");
+  for (var i = 0; i < 10; i++) {
+    data = response.data[i];
 
     getMusicData(data.name, data.artists.items[0].profile.name);
 
@@ -116,7 +113,7 @@ var searchBySong = function (response) {
     createSpotSongList(resultData,resultsEl);
   }
 
-  $("#display-container").append(resultsEl);
+  $("#display-container").append(listEl);
 
   var checkElement = document.querySelector(".song-list");
   console.log(checkElement);
@@ -218,13 +215,19 @@ var createSpotSongList = function (data, resultsEl) {
       .attr("data-play", data.preview)
       .addClass("play-btn")
       .html("Play");
-  
-    listItemEl.append(
+        // listeners by country data showed on page.
+  var listenersByCountry = $("<button>")
+  .attr("type", "button")
+  .addClass("country-btn")
+  .html("Countries By Listeners");
+
+  listItemEl.append(
       albumImageEl,
       songTitleEl,
       otherInfoEl,
       lyricsBtnEl,
-      playBtnEl
+      playBtnEl,
+      listenersByCountry
     );
     listEl.append(listItemEl);
     resultsEl.append(listEl);
