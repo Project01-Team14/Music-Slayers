@@ -95,9 +95,9 @@ var searchBySong = function (response) {
 
   var listEl = $("<ul>").addClass("song-list");
   for (var i = 0; i < 10; i++) {
-    data = response.data[i];
+    data = response.tracks.items[i].data;
 
-    getMusicData(data.name, data.artists.items[0].profile.name);
+    // getMusicData(data.name, data.artists.items[0].profile.name);
 
     resultData = {
         trackName: data.name,
@@ -111,7 +111,7 @@ var searchBySong = function (response) {
     };
     console.log(resultData);
 
-    createSpotSongList(resultData,resultsEl);
+    createSpotSongList(resultData,listEl);
   }
 
   $("#display-container").append(listEl);
@@ -196,8 +196,7 @@ var searchByAlbums = function (response) {
   }
 };
 
-var createSpotSongList = function (data, resultsEl) {
-    var listEl = $("<ul>").addClass("song-list");
+var createSpotSongList = function (data, listEl) {
     var listItemEl = $("<li>").addClass("song-item");
   
     var albumImageEl = $("<img>")
@@ -231,7 +230,6 @@ var createSpotSongList = function (data, resultsEl) {
       listenersByCountry
     );
     listEl.append(listItemEl);
-    resultsEl.append(listEl);
   
     // console.log(data);
 };  
