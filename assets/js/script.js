@@ -45,6 +45,7 @@ var getMusicData = function (search, artist) {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+      // YURI'S API KEY
       "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
     },
   };
@@ -98,7 +99,7 @@ var searchBySong = function (response) {
   for (var i = 0; i < response.tracks.items.length; i++) {
     data = response.tracks.items[i].data;
 
-    // getMusicData(data.name, data.artists.items[0].profile.name);
+    getMusicData(data.name, data.artists.items[0].profile.name);
 
     resultData = {
         trackName: data.name,
