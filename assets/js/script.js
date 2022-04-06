@@ -56,6 +56,7 @@ var getMusicData = function (search, artist) {
     .then((response) => response.json())
     // get data
     .then(function (response) {
+        // GET PREVIEW DATA (NOT COMPLETED)
         for (var i = 0; i < response.data.length; i++) {
             var deezerData = response.data[i]
             if (deezerData.title === search) {
