@@ -6,7 +6,7 @@ var albumEl = document.querySelector(".album");
 var searchCriteria = "";
 var selectedBtn = "";
 var data = "";
-var resultsEl = "";
+var listEl = "";
 
 // monthly users per artist function
 
@@ -44,8 +44,6 @@ var getSearch = function (searchCriteria) {
     // if error show the error
     .catch((err) => console.error(err));
 };
-
-getSearch("Beyonce");
 
 var getMusicData = function (searchCriteria, selectedBtn) {
   // set options to fetch url
@@ -89,19 +87,18 @@ var searchBySong = function (response) {
     $(".results-container").detach();
   }
 
-  resultsEl = $("<div>").addClass("results-container");
-
+  var listEl = $("<ul>").addClass("song-list");
   for (var i = 0; i < 10; i++) {
     data = response.data[i];
 
     if (data.title.match(searchCriteria)) {
-      createSongList(data, resultsEl);
+      createSongList(data, listEl);
     } else {
       console.log("not the one");
     }
   }
 
-  $("#display-container").append(resultsEl);
+  $("#display-container").append(listEl);
 
   var checkElement = document.querySelector(".song-list");
   console.log(checkElement);
@@ -183,8 +180,7 @@ var searchByAlbums = function (response) {
   }
 };
 
-var createSongList = function (data, resultsEl) {
-  var listEl = $("<ul>").addClass("song-list");
+var createSongList = function (data, listEl) {
   var listItemEl = $("<li>").addClass("song-item");
 
   var albumImageEl = $("<img>")
@@ -203,16 +199,21 @@ var createSongList = function (data, resultsEl) {
     .attr("data-play", data.preview)
     .addClass("play-btn")
     .html("Play");
+  // listeners by country data showed on page.
+  var listenersByCountry = $("<button>")
+    .attr("type", "button")
+    .addClass("country-btn")
+    .html("Countries By Listeners");
 
   listItemEl.append(
     albumImageEl,
     songTitleEl,
     otherInfoEl,
     lyricsBtnEl,
-    playBtnEl
+    playBtnEl,
+    listenersByCountry
   );
   listEl.append(listItemEl);
-  resultsEl.append(listEl);
 
   console.log(data);
   console.log(data.artist.picture_small);
