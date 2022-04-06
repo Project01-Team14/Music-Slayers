@@ -8,8 +8,7 @@ var selectedBtn = "";
 var data = "";
 var resultsEl = "";
 
-// monthly users per artist function
-
+// fetch data from spotify
 var getSearch = function (searchCriteria) {
   const options = {
     method: "GET",
@@ -27,26 +26,18 @@ var getSearch = function (searchCriteria) {
   )
     .then((response) => response.json())
     .then(function (response) {
-      // if "Songs" radio button is selected, get tracks data
-      if (selectedBtn === "Songs") {
-        searchBySong(response);
-        // if "Artists" selected, get artists data
-      } else if (selectedBtn === "Artists") {
-        searchByArtists(response);
-        // if "Albums" selected, get artists data
-      } else if (selectedBtn === "Albums") {
-        searchByAlbums(response);
-        // if nothing selected, show error
-      } else {
-        console.log("error");
-      }
+        console.log(response);
+        if (selectedBtn === "Songs") {
+            searchBySong(response);
+        }
     })
     // if error show the error
     .catch((err) => console.error(err));
 };
 
-getSearch("Beyonce");
+// getSearch("Beyonce");
 
+// fetch data from deezer
 var getMusicData = function (searchCriteria, selectedBtn) {
   // set options to fetch url
   const options = {
@@ -83,6 +74,23 @@ var getMusicData = function (searchCriteria, selectedBtn) {
     .catch((err) => console.error(err));
 };
 
+var searchEventHandler = function() {
+    // if "Songs" radio button is selected, get tracks data
+    if (selectedBtn === "Songs") {
+        getSearch(searchCriteria);
+    // if "Artists" selected, get artists data
+    } else if (selectedBtn === "Artists") {
+        searchByArtists(response);
+    // if "Albums" selected, get artists data
+    } else if (selectedBtn === "Albums") {
+        searchByAlbums(response);
+    // if nothing selected, show error
+    } else {
+        console.log("error");
+    }
+    
+}
+
 // search by "Songs"
 var searchBySong = function (response) {
   if ($(".results-container") !== null) {
@@ -91,6 +99,8 @@ var searchBySong = function (response) {
 
   resultsEl = $("<div>").addClass("results-container");
 
+
+//   console.log(response);
   for (var i = 0; i < 10; i++) {
     data = response.data[i];
 
@@ -101,20 +111,20 @@ var searchBySong = function (response) {
     }
   }
 
-  $("#display-container").append(resultsEl);
+//   $("#display-container").append(resultsEl);
 
-  var checkElement = document.querySelector(".song-list");
-  console.log(checkElement);
+//   var checkElement = document.querySelector(".song-list");
+//   console.log(checkElement);
 
-  if (checkElement) {
-    $("#result-subtitle").html(
-      "Showing results for: " + searchCriteria + " (" + selectedBtn + ")"
-    );
-  } else {
-    $("#result-subtitle").html(
-      "No results found for: " + searchCriteria + " (" + selectedBtn + ")"
-    );
-  }
+//   if (checkElement) {
+//     $("#result-subtitle").html(
+//       "Showing results for: " + searchCriteria + " (" + selectedBtn + ")"
+//     );
+//   } else {
+//     $("#result-subtitle").html(
+//       "No results found for: " + searchCriteria + " (" + selectedBtn + ")"
+//     );
+//   }
 };
 
 // search by "Artists"
@@ -235,7 +245,8 @@ buttonEl.addEventListener("click", function (event) {
     // if button is checked, get its value
     if (i.checked) {
       selectedBtn = i.value;
-      getMusicData(searchCriteria, selectedBtn);
+    //   getMusicData(searchCriteria, selectedBtn);
+      searchEventHandler(searchCriteria);
       break;
     }
   }
