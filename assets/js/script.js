@@ -7,21 +7,22 @@ var searchCriteria = "";
 var selectedBtn = "";
 var data = "";
 var resultsEl = "";
+var songPreview = "";
 
 // fetch data from spotify
 var getSearch = function (searchCriteria) {
-  const options = {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
-    },
-  };
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
+            'X-RapidAPI-Key': 'e9e794b108mshaae6cf85014f437p165fa3jsn8f4bc7c5e72e'
+        }
+    };
 
   fetch(
     "https://spotify23.p.rapidapi.com/search/?q=" +
       searchCriteria +
-      "&type=multi&offset=0&limit=10&numberOfTopResults=10",
+      "&type=multi&offset=0&limit=10&numberOfTopResults=5",
     options
   )
     .then((response) => response.json())
@@ -38,7 +39,7 @@ var getSearch = function (searchCriteria) {
 // getSearch("Beyonce");
 
 // fetch data from deezer
-var getMusicData = function (searchCriteria, selectedBtn) {
+var getMusicData = function (search, artist) {
   // set options to fetch url
   const options = {
     method: "GET",
@@ -50,31 +51,27 @@ var getMusicData = function (searchCriteria, selectedBtn) {
 
   // get data by fetching deezer url using user's criteria
   fetch(
-    "https://deezerdevs-deezer.p.rapidapi.com/search?q=" + searchCriteria,
+    "https://deezerdevs-deezer.p.rapidapi.com/search?q=" + search,
     options
   )
     .then((response) => response.json())
     // get data
     .then(function (response) {
-      // if "Songs" radio button is selected, get tracks data
-      if (selectedBtn === "Songs") {
-        searchBySong(response);
-        // if "Artists" selected, get artists data
-      } else if (selectedBtn === "Artists") {
-        searchByArtists(response);
-        // if "Albums" selected, get artists data
-      } else if (selectedBtn === "Albums") {
-        searchByAlbums(response);
-        // if nothing selected, show error
-      } else {
-        console.log("error");
-      }
+        for (var i = 0; i < response.data.length; i++) {
+            var deezerData = response.data[i]
+            if (deezerData.title === search) {
+                if (deezerData.artist.name === artist) {
+                    songPreview = deezerData.preview
+                    break;
+                }
+            }
+        }
     })
     // if error show the error
     .catch((err) => console.error(err));
 };
 
-var searchEventHandler = function() {
+var searchEventHandler = function(searchCriteria) {
     // if "Songs" radio button is selected, get tracks data
     if (selectedBtn === "Songs") {
         getSearch(searchCriteria);
@@ -88,7 +85,6 @@ var searchEventHandler = function() {
     } else {
         console.log("error");
     }
-    
 }
 
 // search by "Songs"
@@ -99,32 +95,40 @@ var searchBySong = function (response) {
 
   resultsEl = $("<div>").addClass("results-container");
 
+  for (var i = 0; i < response.tracks.items.length; i++) {
+    data = response.tracks.items[i].data;
 
-//   console.log(response);
-  for (var i = 0; i < 10; i++) {
-    data = response.data[i];
+    // getMusicData(data.name, data.artists.items[0].profile.name);
 
-    if (data.title.match(searchCriteria)) {
-      createSongList(data, resultsEl);
-    } else {
-      console.log("not the one");
-    }
+    resultData = {
+        trackName: data.name,
+        trackUri: data.uri,
+        artistName: data.artists.items[0].profile.name,
+        artistUri: data.artists.items[0].uri,
+        albumName: data.albumOfTrack.name,
+        albumId: data.albumOfTrack.id,
+        albumCover: data.albumOfTrack.coverArt.sources[1].url,
+        // preview: songPreview
+    };
+    console.log(resultData);
+
+    createSpotSongList(resultData,resultsEl);
   }
 
-//   $("#display-container").append(resultsEl);
+  $("#display-container").append(resultsEl);
 
-//   var checkElement = document.querySelector(".song-list");
-//   console.log(checkElement);
+  var checkElement = document.querySelector(".song-list");
+  console.log(checkElement);
 
-//   if (checkElement) {
-//     $("#result-subtitle").html(
-//       "Showing results for: " + searchCriteria + " (" + selectedBtn + ")"
-//     );
-//   } else {
-//     $("#result-subtitle").html(
-//       "No results found for: " + searchCriteria + " (" + selectedBtn + ")"
-//     );
-//   }
+  if (checkElement) {
+    $("#result-subtitle").html(
+      "Showing results for: " + searchCriteria + " (" + selectedBtn + ")"
+    );
+  } else {
+    $("#result-subtitle").html(
+      "No results found for: " + searchCriteria + " (" + selectedBtn + ")"
+    );
+  }
 };
 
 // search by "Artists"
@@ -193,40 +197,74 @@ var searchByAlbums = function (response) {
   }
 };
 
-var createSongList = function (data, resultsEl) {
-  var listEl = $("<ul>").addClass("song-list");
-  var listItemEl = $("<li>").addClass("song-item");
+var createSpotSongList = function (data, resultsEl) {
+    var listEl = $("<ul>").addClass("song-list");
+    var listItemEl = $("<li>").addClass("song-item");
+  
+    var albumImageEl = $("<img>")
+      .attr("src", data.albumCover)
+      .attr("alt", data.artistName + "'s album " + data.albumName);
+    var songTitleEl = $("<h3>").addClass("song-title").html(data.trackName);
+    var otherInfoEl = $("<p>")
+      .addClass("song-info")
+      .html(data.artistName + " - " + data.albumName);
+    var lyricsBtnEl = $("<button>")
+      .attr("type", "button")
+      .addClass("lyrics-btn")
+      .html("Lyrics");
+    var playBtnEl = $("<button>")
+      .attr("type", "button")
+      .attr("data-play", data.preview)
+      .addClass("play-btn")
+      .html("Play");
+  
+    listItemEl.append(
+      albumImageEl,
+      songTitleEl,
+      otherInfoEl,
+      lyricsBtnEl,
+      playBtnEl
+    );
+    listEl.append(listItemEl);
+    resultsEl.append(listEl);
+  
+    // console.log(data);
+};  
 
-  var albumImageEl = $("<img>")
-    .attr("src", data.album.cover_small)
-    .attr("alt", data.artist.name + "'s album " + data.album.title);
-  var songTitleEl = $("<h3>").addClass("song-title").html(data.title);
-  var otherInfoEl = $("<p>")
-    .addClass("song-info")
-    .html(data.artist.name + " - " + data.album.title);
-  var lyricsBtnEl = $("<button>")
-    .attr("type", "button")
-    .addClass("lyrics-btn")
-    .html("Lyrics");
-  var playBtnEl = $("<button>")
-    .attr("type", "button")
-    .attr("data-play", data.preview)
-    .addClass("play-btn")
-    .html("Play");
+// var createSongList = function (data, resultsEl) {
+//   var listEl = $("<ul>").addClass("song-list");
+//   var listItemEl = $("<li>").addClass("song-item");
 
-  listItemEl.append(
-    albumImageEl,
-    songTitleEl,
-    otherInfoEl,
-    lyricsBtnEl,
-    playBtnEl
-  );
-  listEl.append(listItemEl);
-  resultsEl.append(listEl);
+//   var albumImageEl = $("<img>")
+//     .attr("src", data.album.cover_small)
+//     .attr("alt", data.artist.name + "'s album " + data.album.title);
+//   var songTitleEl = $("<h3>").addClass("song-title").html(data.title);
+//   var otherInfoEl = $("<p>")
+//     .addClass("song-info")
+//     .html(data.artist.name + " - " + data.album.title);
+//   var lyricsBtnEl = $("<button>")
+//     .attr("type", "button")
+//     .addClass("lyrics-btn")
+//     .html("Lyrics");
+//   var playBtnEl = $("<button>")
+//     .attr("type", "button")
+//     .attr("data-play", data.preview)
+//     .addClass("play-btn")
+//     .html("Play");
 
-  console.log(data);
-  console.log(data.artist.picture_small);
-};
+//   listItemEl.append(
+//     albumImageEl,
+//     songTitleEl,
+//     otherInfoEl,
+//     lyricsBtnEl,
+//     playBtnEl
+//   );
+//   listEl.append(listItemEl);
+//   resultsEl.append(listEl);
+
+//   console.log(data);
+//   console.log(data.artist.picture_small);
+// };
 
 //Add event listener button
 buttonEl.addEventListener("click", function (event) {
@@ -277,18 +315,18 @@ $("#display-container").on("click", ".play-btn", function () {
 });
 
 // set options to fetch url
-const lyricsApi = {
-  method: "GET",
-  headers: {
-    "X-RapidAPI-Host": "genius-song-lyrics1.p.rapidapi.com",
-    "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
-  },
-};
+// const lyricsApi = {
+//   method: "GET",
+//   headers: {
+//     "X-RapidAPI-Host": "genius-song-lyrics1.p.rapidapi.com",
+//     "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
+//   },
+// };
 
-fetch(
-  "https://genius-song-lyrics1.p.rapidapi.com/songs/2396871/lyrics",
-  lyricsApi
-)
-  .then((response) => response.json())
-  .then((response) => console.log(response))
-  .catch((err) => console.error(err));
+// fetch(
+//   "https://genius-song-lyrics1.p.rapidapi.com/songs/2396871/lyrics",
+//   lyricsApi
+// )
+//   .then((response) => response.json())
+//   .then((response) => console.log(response))
+//   .catch((err) => console.error(err));
