@@ -7,10 +7,11 @@ var searchCriteria = "";
 var selectedBtn = "";
 var data = "";
 var resultsEl = "";
+var resultData = [];
 
 // monthly users per artist function
 
-var getSearch = function (searchCriteria) {
+var getSearch = function (searchCriteria, selectedBtn) {
   const options = {
     method: "GET",
     headers: {
@@ -22,51 +23,14 @@ var getSearch = function (searchCriteria) {
   fetch(
     "https://spotify23.p.rapidapi.com/search/?q=" +
       searchCriteria +
-      "&type=multi&offset=0&limit=10&numberOfTopResults=10",
+      "&type=multi&offset=0&limit=5",
     options
   )
     .then((response) => response.json())
     .then(function (response) {
       // if "Songs" radio button is selected, get tracks data
       if (selectedBtn === "Songs") {
-        searchBySong(response);
-        // if "Artists" selected, get artists data
-      } else if (selectedBtn === "Artists") {
-        searchByArtists(response);
-        // if "Albums" selected, get artists data
-      } else if (selectedBtn === "Albums") {
-        searchByAlbums(response);
-        // if nothing selected, show error
-      } else {
-        console.log("error");
-      }
-    })
-    // if error show the error
-    .catch((err) => console.error(err));
-};
-
-getSearch("Beyonce");
-
-var getMusicData = function (searchCriteria, selectedBtn) {
-  // set options to fetch url
-  const options = {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
-    },
-  };
-
-  // get data by fetching deezer url using user's criteria
-  fetch(
-    "https://deezerdevs-deezer.p.rapidapi.com/search?q=" + searchCriteria,
-    options
-  )
-    .then((response) => response.json())
-    // get data
-    .then(function (response) {
-      // if "Songs" radio button is selected, get tracks data
-      if (selectedBtn === "Songs") {
+        // console.log(response);
         searchBySong(response);
         // if "Artists" selected, get artists data
       } else if (selectedBtn === "Artists") {
@@ -91,14 +55,20 @@ var searchBySong = function (response) {
 
   resultsEl = $("<div>").addClass("results-container");
 
-  for (var i = 0; i < 10; i++) {
-    data = response.data[i];
-
-    if (data.title.match(searchCriteria)) {
-      createSongList(data, resultsEl);
-    } else {
-      console.log("not the one");
-    }
+  for (var i = 0; i < response.tracks.items.length; i++) {
+    data = response.tracks.items[i].data;
+    resultData = {
+        trackName: data.name,
+        trackUri: data.uri,
+        artistName: data.artists.items[0].profile.name,
+        artistUri: data.artists.items[0].uri,
+        albumName: data.albumOfTrack.name,
+        albumId: data.albumOfTrack.id,
+        albumCover: data.albumOfTrack.coverArt.sources[1].url,
+        playability: data.playability.playable  // Boolean
+    };
+    console.log(resultData);
+    // createSongList(resultData, resultsEl);
   }
 
   $("#display-container").append(resultsEl);
@@ -125,29 +95,42 @@ var searchByArtists = function (response) {
 
   resultsEl = $("<div>").addClass("results-container");
 
-  for (var i = 0; i < 10; i++) {
-    data = response.data[i];
+  console.log(response);
+  for (var i = 0; i < response.artists.items.length; i++) {
+    data = response.artists.items[i].data;
+    resultData = {
+        // trackName: data.name,
+        // trackUri: data.uri,
+        artistName: data.profile.name,
+        artistUri: data.uri,
+        artistImg: data.visuals.avatarImage.sources[0].url, // [0] w&h: 640, [1] w&h: 160
+        // albumName: data.albumOfTrack.name,
+        // albumId: data.albumOfTrack.id,
+        // albumCover: data.albumOfTrack.coverArt.sources[1].url,
+        // playability: data.playability.playable  // Boolean
+    };
+    console.log(data);
 
-    if (data.artist.name.match(searchCriteria)) {
-      createSongList(data, resultsEl);
-    } else {
-      console.log("not the one");
-    }
+    console.log(resultData);
+
+    // getArtists(resultData.artistUri);
+
+    // createSongList(resultData, resultsEl);
   }
 
-  $("#display-container").append(resultsEl);
+//   $("#display-container").append(resultsEl);
 
-  var checkElement = document.querySelector(".song-list");
+//   var checkElement = document.querySelector(".song-list");
 
-  if (checkElement) {
-    $("#result-subtitle").html(
-      "Showing results for: " + searchCriteria + " (" + selectedBtn + ")"
-    );
-  } else {
-    $("#result-subtitle").html(
-      "No results found for: " + searchCriteria + " (" + selectedBtn + ")"
-    );
-  }
+//   if (checkElement) {
+//     $("#result-subtitle").html(
+//       "Showing results for: " + searchCriteria + " (" + selectedBtn + ")"
+//     );
+//   } else {
+//     $("#result-subtitle").html(
+//       "No results found for: " + searchCriteria + " (" + selectedBtn + ")"
+//     );
+//   }
 };
 
 // search by "Albums"
@@ -158,14 +141,19 @@ var searchByAlbums = function (response) {
 
   resultsEl = $("<div>").addClass("results-container");
 
-  for (var i = 0; i < 10; i++) {
-    data = response.data[i];
-
-    if (data.album.title.match(searchCriteria)) {
-      createSongList(data, resultsEl);
-    } else {
-      console.log("not the one");
-    }
+  for (var i = 0; i < response.albums.items.length; i++) {
+    data = response.tracks.items[i].data;
+    resultData = {
+        // trackName: data.name,
+        // trackUri: data.uri,
+        artistName: data.artists.items[0].profile.name,
+        artistUri: data.artists.items[0].uri,
+        albumName: data.name,
+        albumUri: data.uri,
+        albumCover: data.coverArt.sources[1].url,
+        // playability: data.playability.playable  // Boolean
+    };
+    // createSongList(resultData, resultsEl);
   }
 
   $("#display-container").append(resultsEl);
@@ -187,36 +175,54 @@ var createSongList = function (data, resultsEl) {
   var listEl = $("<ul>").addClass("song-list");
   var listItemEl = $("<li>").addClass("song-item");
 
-  var albumImageEl = $("<img>")
-    .attr("src", data.album.cover_small)
-    .attr("alt", data.artist.name + "'s album " + data.album.title);
-  var songTitleEl = $("<h3>").addClass("song-title").html(data.title);
-  var otherInfoEl = $("<p>")
-    .addClass("song-info")
-    .html(data.artist.name + " - " + data.album.title);
+//   var albumImageEl = $("<img>")
+//     .attr("src", data.albumCover)
+//     .attr("alt", data.artistName + "'s album " + data.albumName);
+//   var songTitleEl = $("<h3>").addClass("song-title").html(data.trackName);
+//   var otherInfoEl = $("<p>")
+//     .addClass("song-info")
+//     .html(data.artistName + " - " + data.albumName);
   var lyricsBtnEl = $("<button>")
     .attr("type", "button")
     .addClass("lyrics-btn")
     .html("Lyrics");
-  var playBtnEl = $("<button>")
-    .attr("type", "button")
-    .attr("data-play", data.preview)
-    .addClass("play-btn")
-    .html("Play");
+//   var playBtnEl = $("<button>")
+//     .attr("type", "button")
+//     .attr("data-play", "")
+//     .addClass("play-btn")
+//     .html("Play");
 
   listItemEl.append(
-    albumImageEl,
-    songTitleEl,
-    otherInfoEl,
+    // albumImageEl,
+    // songTitleEl,
+    // otherInfoEl,
     lyricsBtnEl,
-    playBtnEl
+    // playBtnEl
   );
   listEl.append(listItemEl);
   resultsEl.append(listEl);
 
   console.log(data);
-  console.log(data.artist.picture_small);
 };
+
+// get artists data
+var getArtists = function(Uri) {
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
+            'X-RapidAPI-Key': '6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d'
+        }
+    };
+
+    var id = Uri.substr(15);
+    console.log(id);
+    
+    fetch('https://spotify23.p.rapidapi.com/artists/?ids=' + id + '&limit=10&numberOfTopResults=10', options)
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+}
 
 //Add event listener button
 buttonEl.addEventListener("click", function (event) {
@@ -235,7 +241,7 @@ buttonEl.addEventListener("click", function (event) {
     // if button is checked, get its value
     if (i.checked) {
       selectedBtn = i.value;
-      getMusicData(searchCriteria, selectedBtn);
+      getSearch(searchCriteria, selectedBtn);
       break;
     }
   }
