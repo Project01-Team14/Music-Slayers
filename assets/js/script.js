@@ -16,7 +16,7 @@ var getSearch = function (searchCriteria) {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942"
+      "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
     },
   };
 
@@ -342,7 +342,7 @@ $("#display-container").on("click", ".play-btn", function () {
 // click event
 
 $("#display-container").on("click", ".country-btn", function (event) {
-    // event.preventDefault();
+  // event.preventDefault();
   var artistId = $(this).attr("artistId").substr(15);
   const options = {
     method: "GET",
@@ -362,6 +362,7 @@ $("#display-container").on("click", ".country-btn", function (event) {
       var topCities = data.data.artist.stats.topCities;
 
       var citiesUsers = [];
+      console.log(citiesUsers);
 
       for (var i = 0; i < 3; i++) {
         var numberOfListeners = topCities.items[i].numberOfListeners;
@@ -373,7 +374,7 @@ $("#display-container").on("click", ".country-btn", function (event) {
         citiesUsers.push(tempArr);
       }
 
-      localStorage.setItem("graph-data", JSON.stringify(citiesUsers))
+      localStorage.setItem("graph-data", JSON.stringify(citiesUsers));
 
       console.log(JSON.parse(localStorage.getItem("graph-data")));
       console.log(citiesUsers);
