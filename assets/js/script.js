@@ -3,6 +3,7 @@ var buttonEl = document.querySelector(".btn");
 var songsEl = document.querySelector(".songs");
 var artistEl = document.querySelector(".artists");
 var albumEl = document.querySelector(".album");
+
 var searchCriteria = "";
 var selectedBtn = "";
 var data = "";
@@ -294,7 +295,6 @@ buttonEl.addEventListener("click", function (event) {
   console.log(selectedBtn);
 });
 
-// Genius song lyrics Glavier ("https://rapidapi.com/Glavier/api/genius-song-lyrics1/")
 
 $("#display-container").on("click", ".play-btn", function () {
   var audioSrc = $(this).attr("data-play");
@@ -317,19 +317,61 @@ $("#display-container").on("click", ".play-btn", function () {
   });
 });
 
-set options to fetch url
-const lyricsApi = {
-  method: "GET",
-  headers: {
-    "X-RapidAPI-Host": "genius-song-lyrics1.p.rapidapi.com",
-    "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
-  },
-};
+//set options to fetch lyrics url
 
-fetch(
-  "https://genius-song-lyrics1.p.rapidapi.com/songs/2396871/lyrics",
-  lyricsApi
-)
+var getLyrics = function() {
+  const options = {
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Host': 'genius-song-lyrics1.p.rapidapi.com',
+      'X-RapidAPI-Key': '8953cc16a8msh362e3da83f41059p119f26jsn264a41186942'
+    }
+  };
+
+fetch('https://genius-song-lyrics1.p.rapidapi.com/songs/2396871/lyrics', options)
   .then((response) => response.json())
-  .then((response) => console.log(response))
+  .then(function(response) {
+    console.log(response);
+    if (selectedBtn === "Lyrics") {
+      searchByLyrics(response);
+    }
+  })
+   // if error show the error
   .catch((err) => console.error(err));
+};
+// create click event for lyricsBtnEl
+// console.log(getLyrics);
+// search by Lyrics
+var searchByLyrics = function (response) {
+  if ($(".results-container") !== null) {
+    $(".results-container").detach();
+  }
+
+  var showLyricsEl = $("<p>").addClass("show-lyrics");
+  for (var i = 0; i < lyrics.length; i++) {
+    if (data.lyrics.match(searchCriteria)) {
+      searchByLyrics(data, showLyricsEl);
+    } else {
+      console.log("not the one");
+    }
+  }
+    data = response.lyrics.lyrics[i].body.html;
+
+   var displayLyrics = {
+        lyrics: data.response.lyrics.lyrics[i].body.html,
+    };
+    console.log(displayLyrics);
+  }
+
+  // var checkElement = document.querySelector(".show-lyrics");
+  // console.log(checkElement);
+
+
+$("<p>").on("click", ".lyrics-btn", function () {
+  var showLyrics = $(this).attr.text(displayLyrics);
+
+  console.log(showLyrics);
+  
+  
+  
+});
