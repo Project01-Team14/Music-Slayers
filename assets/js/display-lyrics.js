@@ -1,11 +1,18 @@
 var displayLyrics = JSON.parse(localStorage.getItem("Lyrics"));
-var pEl= $("<p>")
-.attr("id", "paragraph")
-var divEl = $("<div>")
-.attr("id", "show")
 
-  $("#display-container").append(pEl, divEl);
+var divEl = $("<div>").attr("id", "show");
+console.log(displayLyrics)
+for (var i = 0; i < displayLyrics.length; i++) {
+  var pEl= $("<p>")
+    .attr("id", "paragraph")  
+    .html(displayLyrics[i].line);
+  divEl.append(pEl);
+}
 
-  console.log(displayLyrics);
+console.log(divEl);
 
-  localStorage.removeItem("Lyrics");
+$("#display-container").append(divEl);
+
+console.log(displayLyrics);
+
+localStorage.removeItem("Lyrics");
