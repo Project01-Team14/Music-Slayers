@@ -9,16 +9,17 @@ var selectedBtn = "";
 var data = "";
 var songPreview = "";
 var listEl = "";
+var resultData = "";
 
 // fetch data from spotify
 var getSearch = function (searchCriteria) {
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
-            'X-RapidAPI-Key': '8953cc16a8msh362e3da83f41059p119f26jsn264a41186942'
-        }
-    };
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
+      "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
+    },
+  };
 
   fetch(
     "https://spotify23.p.rapidapi.com/search/?q=" +
@@ -28,10 +29,10 @@ var getSearch = function (searchCriteria) {
   )
     .then((response) => response.json())
     .then(function (response) {
-        console.log(response);
-        if (selectedBtn === "Songs") {
-            searchBySong(response);
-        }
+      console.log(response);
+      if (selectedBtn === "Songs") {
+        searchBySong(response);
+      }
     })
     // if error show the error
     .catch((err) => console.error(err));
@@ -50,43 +51,40 @@ var getMusicData = function (search, artist) {
   };
 
   // get data by fetching deezer url using user's criteria
-  fetch(
-    "https://deezerdevs-deezer.p.rapidapi.com/search?q=" + search,
-    options
-  )
+  fetch("https://deezerdevs-deezer.p.rapidapi.com/search?q=" + search, options)
     .then((response) => response.json())
     // get data
     .then(function (response) {
-        // GET PREVIEW DATA (NOT COMPLETED)
-        for (var i = 0; i < response.data.length; i++) {
-            var deezerData = response.data[i]
-            if (deezerData.title === search) {
-                if (deezerData.artist.name === artist) {
-                    songPreview = deezerData.preview
-                    break;
-                }
-            }
+      // GET PREVIEW DATA (NOT COMPLETED)
+      for (var i = 0; i < response.data.length; i++) {
+        var deezerData = response.data[i];
+        if (deezerData.title === search) {
+          if (deezerData.artist.name === artist) {
+            songPreview = deezerData.preview;
+            break;
+          }
         }
+      }
     })
     // if error show the error
     .catch((err) => console.error(err));
 };
 
-var searchEventHandler = function(searchCriteria) {
-    // if "Songs" radio button is selected, get tracks data
-    if (selectedBtn === "Songs") {
-        getSearch(searchCriteria);
+var searchEventHandler = function (searchCriteria) {
+  // if "Songs" radio button is selected, get tracks data
+  if (selectedBtn === "Songs") {
+    getSearch(searchCriteria);
     // if "Artists" selected, get artists data
-    } else if (selectedBtn === "Artists") {
-        searchByArtists(response);
+  } else if (selectedBtn === "Artists") {
+    searchByArtists(response);
     // if "Albums" selected, get artists data
-    } else if (selectedBtn === "Albums") {
-        searchByAlbums(response);
+  } else if (selectedBtn === "Albums") {
+    searchByAlbums(response);
     // if nothing selected, show error
-    } else {
-        console.log("error");
-    }
-}
+  } else {
+    console.log("error");
+  }
+};
 
 // search by "Songs"
 var searchBySong = function (response) {
@@ -101,18 +99,18 @@ var searchBySong = function (response) {
     // getMusicData(data.name, data.artists.items[0].profile.name);
 
     resultData = {
-        trackName: data.name,
-        trackUri: data.uri,
-        artistName: data.artists.items[0].profile.name,
-        artistUri: data.artists.items[0].uri,
-        albumName: data.albumOfTrack.name,
-        albumId: data.albumOfTrack.id,
-        albumCover: data.albumOfTrack.coverArt.sources[1].url,
-        // preview: songPreview
+      trackName: data.name,
+      trackUri: data.uri,
+      artistName: data.artists.items[0].profile.name,
+      artistUri: data.artists.items[0].uri,
+      albumName: data.albumOfTrack.name,
+      albumId: data.albumOfTrack.id,
+      albumCover: data.albumOfTrack.coverArt.sources[1].url,
+      // preview: songPreview
     };
     console.log(resultData);
 
-    createSpotSongList(resultData,listEl);
+    createSpotSongList(resultData, listEl);
   }
 
   $("#display-container").append(listEl);
@@ -198,43 +196,48 @@ var searchByAlbums = function (response) {
 };
 
 var createSpotSongList = function (data, listEl) {
-    var listItemEl = $("<li>").addClass("song-item");
-  
-    var albumImageEl = $("<img>")
-      .attr("src", data.albumCover)
-      .attr("alt", data.artistName + "'s album " + data.albumName);
-    var songTitleEl = $("<h3>").addClass("song-title").html(data.trackName);
-    var otherInfoEl = $("<p>")
-      .addClass("song-info")
-      .html(data.artistName + " - " + data.albumName);
-    var lyricsBtnEl = $("<button>")
-      .attr("type", "button")
-      .attr("track-id", data.trackUri)
-      .addClass("lyrics-btn")
-      .html("Lyrics");
-    var playBtnEl = $("<button>")
-      .attr("type", "button")
-      .attr("data-play", data.preview)
-      .addClass("play-btn")
-      .html("Play");
-        // listeners by country data showed on page.
-  var listenersByCountry = $("<button>")
-  .attr("type", "button")
-  .addClass("country-btn")
-  .html("Countries By Listeners");
+  var listItemEl = $("<li>").addClass("song-item");
+
+  var albumImageEl = $("<img>")
+    .attr("src", data.albumCover)
+    .attr("alt", data.artistName + "'s album " + data.albumName);
+  var songTitleEl = $("<h3>").addClass("song-title").html(data.trackName);
+  var otherInfoEl = $("<p>")
+    .addClass("song-info")
+    .html(data.artistName + " - " + data.albumName);
+  var lyricsBtnEl = $("<button>")
+    .attr("type", "button")
+    .addClass("lyrics-btn")
+    .html("Lyrics");
+  var playBtnEl = $("<button>")
+    .attr("type", "button")
+    .attr("data-play", data.preview)
+    .addClass("play-btn")
+    .html("Play");
+  // listeners by country data showed on page.
+  var listenersByCity = $("<button>")
+    .attr("type", "button")
+    .attr("artistId", data.artistUri)
+    .addClass("country-btn");
+  var graphLinkEl = $("<a>")
+    .attr("href", "./listeners-graph.html?artist=" + data.artistName)
+    .attr("target", "_blank")
+    .attr("rel", "noopener noreferrer")
+    .html("Cities by Listeners");
+  listenersByCity.append(graphLinkEl);
 
   listItemEl.append(
-      albumImageEl,
-      songTitleEl,
-      otherInfoEl,
-      lyricsBtnEl,
-      playBtnEl,
-      listenersByCountry
-    );
-    listEl.append(listItemEl);
-  
-    // console.log(data);
-};  
+    albumImageEl,
+    songTitleEl,
+    otherInfoEl,
+    lyricsBtnEl,
+    playBtnEl,
+    listenersByCity
+  );
+  listEl.append(listItemEl);
+
+  // console.log(data);
+};
 
 // var createSongList = function (data, resultsEl) {
 //   var listEl = $("<ul>").addClass("song-list");
@@ -288,7 +291,7 @@ buttonEl.addEventListener("click", function (event) {
     // if button is checked, get its value
     if (i.checked) {
       selectedBtn = i.value;
-    //   getMusicData(searchCriteria, selectedBtn);
+      //   getMusicData(searchCriteria, selectedBtn);
       searchEventHandler(searchCriteria);
       break;
     }
@@ -375,3 +378,53 @@ $("#display-container").on("click", ".lyrics-btn", function () {
   
 });
 
+// fetch(
+//   "https://genius-song-lyrics1.p.rapidapi.com/songs/2396871/lyrics",
+//   lyricsApi
+// )
+//   .then((response) => response.json())
+//   .then((response) => console.log(response))
+//   .catch((err) => console.error(err));
+
+// displaying countries by users
+// click event
+
+$("#display-container").on("click", ".country-btn", function (event) {
+  // event.preventDefault();
+  var artistId = $(this).attr("artistId").substr(15);
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
+      "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
+    },
+  };
+
+  fetch(
+    "https://spotify23.p.rapidapi.com/artist_overview/?id=" + artistId,
+    options
+  )
+    .then((response) => response.json())
+    .then(function (data) {
+      console.log(data);
+      var topCities = data.data.artist.stats.topCities;
+
+      var citiesUsers = [];
+
+      for (var i = 0; i < 3; i++) {
+        var numberOfListeners = topCities.items[i].numberOfListeners;
+        var listenersByCity = topCities.items[i].city;
+        var tempArr = {
+          numbers: numberOfListeners,
+          city: listenersByCity,
+        };
+        citiesUsers.push(tempArr);
+      }
+
+      localStorage.setItem("graph-data", JSON.stringify(citiesUsers));
+
+      console.log(JSON.parse(localStorage.getItem("graph-data")));
+      console.log(citiesUsers);
+    })
+    .catch((err) => console.error(err));
+});
