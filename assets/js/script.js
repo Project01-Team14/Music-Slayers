@@ -321,14 +321,14 @@ $("#display-container").on("click", ".play-btn", function () {
   });
 });
 
-// set options to fetch url
-// const lyricsApi = {
-//   method: "GET",
-//   headers: {
-//     "X-RapidAPI-Host": "genius-song-lyrics1.p.rapidapi.com",
-//     "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
-//   },
-// };
+set options to fetch url
+const lyricsApi = {
+  method: "GET",
+  headers: {
+    "X-RapidAPI-Host": "genius-song-lyrics1.p.rapidapi.com",
+    "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
+  },
+};
 
 // fetch(
 //   "https://genius-song-lyrics1.p.rapidapi.com/songs/2396871/lyrics",
