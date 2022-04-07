@@ -219,6 +219,15 @@ var createSpotSongList = function (data, listEl) {
     .attr("artistId", resultData.artistUri)
     .addClass("country-btn")
     .html("Countries By Listeners");
+  var graphContEl = $("<div>")
+    .addClass("graph-container")
+  var chartEl = $("<div>")
+    .attr("id", "chart-div")
+  var spaceEl = $("<br/>")
+    .attr("id", "space")  
+  var btnEl = $("<div>")
+    .attr("id", "btn-group")
+  graphContEl.append(chartEl, spaceEl, btnEl);
 
   listItemEl.append(
     albumImageEl,
@@ -226,7 +235,8 @@ var createSpotSongList = function (data, listEl) {
     otherInfoEl,
     lyricsBtnEl,
     playBtnEl,
-    listenersByCountry
+    listenersByCountry,
+    graphContEl
   );
   listEl.append(listItemEl);
 
@@ -336,7 +346,8 @@ $("#display-container").on("click", ".play-btn", function () {
 // displaying countries by users
 // click event
 
-$("#display-container").on("click", ".country-btn", function () {
+$("#display-container").on("click", ".country-btn", function (event) {
+    // event.preventDefault();
   var artistId = $(this).attr("artistId").substr(15);
   const options = {
     method: "GET",
@@ -366,6 +377,10 @@ $("#display-container").on("click", ".country-btn", function () {
         };
         citiesUsers.push(tempArr);
       }
+      // created elements in createSpotSongList function since I couldn't make it work in here
+      
+
+      console.log($(this));
       console.log(citiesUsers);
     })
     .catch((err) => console.error(err));
