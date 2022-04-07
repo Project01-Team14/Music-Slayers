@@ -367,10 +367,10 @@ var searchByLyrics = function (response) {
   // console.log(checkElement);
 
 
-$("<p>").on("click", ".lyrics-btn", function () {
-  var showLyrics = $(this).attr.text(displayLyrics);
+$("#display-container").on("click", ".lyrics-btn", function () {
+  // var showLyrics = $(this).attr.text(displayLyrics);
 
-  console.log(showLyrics);
+   console.log();
   
   
   
