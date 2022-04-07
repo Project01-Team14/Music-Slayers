@@ -207,8 +207,13 @@ var createSpotSongList = function (data, listEl) {
     .html(data.artistName + " - " + data.albumName);
   var lyricsBtnEl = $("<button>")
     .attr("type", "button")
-    .addClass("lyrics-btn")
-    .html("Lyrics");
+    .addClass("lyrics-btn");
+    var lyricsLinkEl = $("<a>")
+  .attr("href", "./display-lyrics.html?track=" + data.trackName)
+  .attr("target", "_blank")
+  .attr("rel", "noopener noreferrer")
+  .html("Lyrics");
+  lyricsBtnEl.append(lyricsLinkEl);
   var playBtnEl = $("<button>")
     .attr("type", "button")
     .attr("data-play", data.preview)
@@ -324,58 +329,52 @@ $("#display-container").on("click", ".play-btn", function () {
 //set options to fetch lyrics url
 
 var getLyrics = function(trackId) {
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
-            'X-RapidAPI-Key': '8953cc16a8msh362e3da83f41059p119f26jsn264a41186942'
-        }
-    };
     
-    fetch('https://spotify23.p.rapidapi.com/track_lyrics/?id=' + trackId, options)
-        .then(response => response.json())
-        .then(function(response) {
-            console.log(response);
-            showLyrics(response);
-        })
-        // if error show the error
-        .catch((err) => console.error(err));
-  
+  }
+  // console.log(lyricsLinkEl);
+  // var checkElement = document.querySelector(".show-lyrics");
+  // console.log(checkElement);
+$("#display-container").on("click", ".lyrics-btn", function () {
+
+//   var showLyrics = $(this).attr.text(displayLyrics);
+
+  var trackId = $(this).attr("trackId");
+  console.log(trackId);
+ // getLyrics(trackId);
+
+  const options = {
+    method: 'GET',
+    headers: {
+        'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
+        'X-RapidAPI-Key': '8953cc16a8msh362e3da83f41059p119f26jsn264a41186942'
+    }
 };
+
+fetch('https://spotify23.p.rapidapi.com/track_lyrics/?id=' + trackId, options)
+    .then(response => response.json())
+    .then(function(response) {
+        console.log(response);
+        showLyrics(response);
+    })
+    // if error show the error
+    .catch((err) => console.error(err));
+
 // create click event for lyricsBtnEl
 // console.log(getLyrics);
 // search by Lyrics
 var showLyrics = function (data) {
-  if ($(".song-list") !== null) {
-    $(".song-list").detach();
-  }
-
-  console.log($(".song-list"))
+var lyricsData= [];
 //   var lyricsData = data.response.lyrics.lyrics[i].body.html;
+for (var i = 0; i < data.lyrics.lines.length; i++) {
+var lyricsLine = data.lyrics.lines[i].words; 
+var tempArr={line: lyricsLine};
+lyricsData.push(tempArr);
+}
+}
+console.log(lyricsData);
+  //store the lyrics data into local storage
+  localStorage.setItem("Lyrics", JSON.stringify(lyricsData));
 
-  var showLyricsEl = $("<div>").addClass("show-lyrics");
-  for (var i = 0; i < data.lyrics.lines.length; i++) {
-    var lyricsLine = data.lyrics.lines[i].words;
-    var lyricsLineEl = $("<p>")
-        .addClass("lyrics-line")
-        .html(lyricsLine);
-    showLyricsEl.append(lyricsLineEl);
-  }
-    console.log(showLyricsEl);
-  }
-  
-  console.log(lyricsLinkEl);
-  // var checkElement = document.querySelector(".show-lyrics");
-  // console.log(checkElement);
-
-
-$("#display-container").on("click", ".lyrics-btn", function () {
-//   var showLyrics = $(this).attr.text(displayLyrics);
-
-  var trackId = $(this).attr("track-id").substr(14);
-  console.log(trackId);
-  getLyrics(trackId);
-  
 });
 
 // fetch(

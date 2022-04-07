@@ -1,9 +1,11 @@
-$("#display-container")
-.append(showLyricsEl);
+var displayLyrics = JSON.parse(localStorage.getItem("Lyrics"));
+var pEl= $("<p>")
+.attr("id", "paragraph")
+var divEl = $("<div>")
+.attr("id", "show")
 
-var lyricsLinkEl = $("<a>")
-  .attr("href", "./display-lyrics.html?track=" + data.trackName)
-  .attr("target", "_blank")
-  .attr("rel", "noopener noreferrer")
-  .html("Display Lyrics");
-  
+  $("#display-container").append(pEl, divEl);
+
+  console.log(displayLyrics);
+
+  localStorage.removeItem("Lyrics");
