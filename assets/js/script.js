@@ -16,7 +16,7 @@ var getSearch = function (searchCriteria) {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      "X-RapidAPI-Key": "e9e794b108mshaae6cf85014f437p165fa3jsn8f4bc7c5e72e",
+      "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942"
     },
   };
 
@@ -214,20 +214,16 @@ var createSpotSongList = function (data, listEl) {
     .addClass("play-btn")
     .html("Play");
   // listeners by country data showed on page.
-  var listenersByCountry = $("<button>")
+  var listenersByCity = $("<button>")
     .attr("type", "button")
-    .attr("artistId", resultData.artistUri)
-    .addClass("country-btn")
-    .html("Countries By Listeners");
-  var graphContEl = $("<div>")
-    .addClass("graph-container")
-  var chartEl = $("<div>")
-    .attr("id", "chart-div")
-  var spaceEl = $("<br/>")
-    .attr("id", "space")  
-  var btnEl = $("<div>")
-    .attr("id", "btn-group")
-  graphContEl.append(chartEl, spaceEl, btnEl);
+    .attr("artistId", data.artistUri)
+    .addClass("country-btn");
+  var graphLinkEl = $("<a>")
+    .attr("href", "./listeners-graph.html?artist=" + data.artistName)
+    .attr("target", "_blank")
+    .attr("rel", "noopener noreferrer")
+    .html("Cities by Listeners");
+  listenersByCity.append(graphLinkEl);
 
   listItemEl.append(
     albumImageEl,
@@ -235,8 +231,7 @@ var createSpotSongList = function (data, listEl) {
     otherInfoEl,
     lyricsBtnEl,
     playBtnEl,
-    listenersByCountry,
-    graphContEl
+    listenersByCity
   );
   listEl.append(listItemEl);
 
@@ -353,7 +348,7 @@ $("#display-container").on("click", ".country-btn", function (event) {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
+      "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
     },
   };
 
@@ -377,10 +372,10 @@ $("#display-container").on("click", ".country-btn", function (event) {
         };
         citiesUsers.push(tempArr);
       }
-      // created elements in createSpotSongList function since I couldn't make it work in here
-      
 
-      console.log($(this));
+      localStorage.setItem("graph-data", JSON.stringify(citiesUsers))
+
+      console.log(JSON.parse(localStorage.getItem("graph-data")));
       console.log(citiesUsers);
     })
     .catch((err) => console.error(err));
