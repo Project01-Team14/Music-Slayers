@@ -358,12 +358,10 @@ var showLyrics = function (data) {
         .html(lyricsLine);
     showLyricsEl.append(lyricsLineEl);
   }
-  
-  $("#display-container").append(showLyricsEl);
-
     console.log(showLyricsEl);
   }
-
+  
+  console.log(lyricsLinkEl);
   // var checkElement = document.querySelector(".show-lyrics");
   // console.log(checkElement);
 
@@ -373,7 +371,7 @@ $("#display-container").on("click", ".lyrics-btn", function () {
 
   var trackId = $(this).attr("track-id").substr(14);
   console.log(trackId);
-  
   getLyrics(trackId);
   
 });
+
