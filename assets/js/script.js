@@ -106,7 +106,7 @@ var searchBySong = function (response) {
       albumName: data.albumOfTrack.name,
       albumId: data.albumOfTrack.id,
       albumCover: data.albumOfTrack.coverArt.sources[1].url,
-      playability: data.playability.playable
+      playability: data.playability.playable,
     };
     console.log(resultData);
 
@@ -309,20 +309,20 @@ buttonEl.addEventListener("click", function (event) {
 $("#display-container").on("click", ".play-btn", function () {
   var playability = $(this).attr("playability");
   var trackId = $(this).attr("trackId").substr(14);
-  var trackUri = $(this).attr("trackId")
+  var trackUri = $(this).attr("trackId");
 
   if (playability) {
     const options = {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
+        "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
         "X-RapidAPI-Key": "1580afc537msh1a6caff87fc91b8p17ece1jsn2c0754e91a4b",
-      }
+      },
     };
-    
-    fetch('https://spotify23.p.rapidapi.com/tracks/?ids=' + trackId, options)
-      .then(response => response.json())
-      .then(function(response) {
+
+    fetch("https://spotify23.p.rapidapi.com/tracks/?ids=" + trackId, options)
+      .then((response) => response.json())
+      .then(function (response) {
         var playBtn = $("button[trackId='" + trackUri + "']");
         var audioSrc = response.tracks[0].preview_url;
         var audio = new Audio(audioSrc);
@@ -343,9 +343,9 @@ $("#display-container").on("click", ".play-btn", function () {
           playBtn.removeClass("pause-btn");
         });
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   } else {
-    console.log("No preview available.")
+    console.log("No preview available.");
   }
 });
 
@@ -445,3 +445,52 @@ $("#display-container").on("click", ".country-btn", function (event) {
     })
     .catch((err) => console.error(err));
 });
+
+// creating a top 10 global playlist
+
+var globalTop10 = function () {
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
+      "X-RapidAPI-Key": "1580afc537msh1a6caff87fc91b8p17ece1jsn2c0754e91a4b",
+    },
+  };
+
+  fetch(
+    "https://spotify23.p.rapidapi.com/charts/?type=viral&country=global&recurrence=daily&date=latest",
+    options
+  )
+    .then((response) => response.json())
+    .then(function (data) {
+      console.log(data);
+
+      var listTop10El = $("<ol>").addClass("top10");
+
+      for (var i = 0; i < 10; i++) {
+        var top10 = {
+          trackName: data.content[i].track_title.substr(30),
+          trackUri: data.content[i].track_url,
+          albumCover: data.content[i].thumbnail,
+          artistName: data.content[i].artists[0],
+        };
+        var listItemEl = $("<li>").addClass("song-item");
+
+        var albumImageEl = $("<img>")
+          .attr("src", top10.albumCover)
+          .attr("alt", top10.artistName);
+        var songTitleEl = $("<h3>")
+          .addClass("song-title")
+          .html(top10.trackName);
+        var otherInfoEl = $("<p>").addClass("song-info").html(top10.artistName);
+
+        listItemEl.append(albumImageEl, songTitleEl, otherInfoEl);
+        listTop10El.append(listItemEl);
+      }
+
+      $("#top10-container").append(listTop10El);
+    })
+    .catch((err) => console.error(err));
+};
+
+globalTop10();
