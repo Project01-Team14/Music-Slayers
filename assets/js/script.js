@@ -11,6 +11,9 @@ var songPreview = "";
 var listEl = "";
 var resultData = "";
 
+var recent5Searches = [];
+var searchesArr = {};
+
 // fetch data from spotify
 var getSearch = function (searchCriteria) {
   const options = {
@@ -29,7 +32,7 @@ var getSearch = function (searchCriteria) {
   )
     .then((response) => response.json())
     .then(function (response) {
-        createSongList(response);
+      createSongList(response);
     })
     // if error show the error
     .catch((err) => console.error(err));
@@ -56,13 +59,16 @@ var createSongList = function (response) {
       albumId: data.albumOfTrack.id,
       albumCover: data.albumOfTrack.coverArt.sources[1].url,
       playability: data.playability.playable,
+      searchCriteria: searchCriteria,
     };
+    recent5Searches.push(resultData);
     console.log(resultData);
 
     createSongListElements(resultData, listEl);
   }
 
   $("#display-container").append(listEl);
+  saveRecentSearches(recent5Searches);
 
   var checkElement = document.querySelector(".song-list");
   console.log(checkElement);
@@ -132,9 +138,10 @@ buttonEl.addEventListener("click", function (event) {
   event.preventDefault();
   // get user's search criteria
   searchCriteria = searchEl.value;
-  searchCriteria = searchCriteria.charAt(0).toUpperCase() + searchCriteria.slice(1);
+  searchCriteria =
+    searchCriteria.charAt(0).toUpperCase() + searchCriteria.slice(1);
   console.log(searchCriteria);
-  
+
   getSearch(searchCriteria);
 });
 
@@ -311,3 +318,9 @@ var globalTop10 = function () {
 };
 
 // globalTop10();
+
+// local storage
+var saveRecentSearches = function (data) {
+  var searches = searchEl.value;
+  localStorage.setItem("mostRecentSearch", searches);
+};
