@@ -493,4 +493,4 @@ var globalTop10 = function () {
     .catch((err) => console.error(err));
 };
 
-globalTop10();
+// globalTop10();
