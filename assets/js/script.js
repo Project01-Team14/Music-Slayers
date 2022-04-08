@@ -106,7 +106,7 @@ var searchBySong = function (response) {
       albumName: data.albumOfTrack.name,
       albumId: data.albumOfTrack.id,
       albumCover: data.albumOfTrack.coverArt.sources[1].url,
-      // preview: songPreview
+      playability: data.playability.playable
     };
     console.log(resultData);
 
@@ -217,7 +217,8 @@ var createSpotSongList = function (data, listEl) {
   lyricsBtnEl.append(lyricsLinkEl);
   var playBtnEl = $("<button>")
     .attr("type", "button")
-    .attr("data-play", data.preview)
+    .attr("playability", data.playability)
+    .attr("trackId", data.trackUri)
     .addClass("play-btn")
     .html("Play");
   // listeners by country data showed on page.
@@ -306,24 +307,46 @@ buttonEl.addEventListener("click", function (event) {
 });
 
 $("#display-container").on("click", ".play-btn", function () {
-  var audioSrc = $(this).attr("data-play");
-  var audio = new Audio(audioSrc);
+  var playability = $(this).attr("playability");
+  var trackId = $(this).attr("trackId").substr(14);
+  var trackUri = $(this).attr("trackId")
 
-  console.log(audioSrc);
-  audio.play();
+  if (playability) {
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
+        "X-RapidAPI-Key": "1580afc537msh1a6caff87fc91b8p17ece1jsn2c0754e91a4b",
+      }
+    };
+    
+    fetch('https://spotify23.p.rapidapi.com/tracks/?ids=' + trackId, options)
+      .then(response => response.json())
+      .then(function(response) {
+        var playBtn = $("button[trackId='" + trackUri + "']");
+        var audioSrc = response.tracks[0].preview_url;
+        var audio = new Audio(audioSrc);
 
-  $(this).text("Pause");
-  $(this).addClass("pause-btn");
-  $(this).removeClass("play-btn");
+        console.log(audioSrc);
+        audio.play();
 
-  $("#display-container").on("click", ".pause-btn", function () {
-    audio.pause();
-    console.log(audioSrc);
+        playBtn.text("Pause");
+        playBtn.addClass("pause-btn");
+        playBtn.removeClass("play-btn");
 
-    $(this).text("Play");
-    $(this).addClass("play-btn");
-    $(this).removeClass("pause-btn");
-  });
+        $("#display-container").on("click", ".pause-btn", function () {
+          audio.pause();
+          console.log(audioSrc);
+
+          playBtn.text("Play");
+          playBtn.addClass("play-btn");
+          playBtn.removeClass("pause-btn");
+        });
+      })
+      .catch(err => console.error(err));
+  } else {
+    console.log("No preview available.")
+  }
 });
 
 //set options to fetch lyrics url
