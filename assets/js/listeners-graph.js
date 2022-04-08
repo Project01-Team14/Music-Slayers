@@ -1,15 +1,19 @@
 var graphData = JSON.parse(localStorage.getItem("graph-data"));
 
-var chartEl = $("<div>").attr("id", "chart-div");
-var spaceEl = $("<br/>").attr("id", "space");
-var btnEl = $("<div>").attr("id", "btn-group");
-$("#graph-container").append(chartEl, spaceEl, btnEl);
+var city1 = graphData[0].city;
+var listenersByCity1 = graphData[0].numbers;
 
+var city2 = graphData[1].city;
+var listenersByCity2 = graphData[1].numbers;
+
+var city3 = graphData[2].city;
+var listenersByCity3 = graphData[2].numbers;
+
+var artistName = graphData[1].artist;
 console.log(graphData);
-console.log(graphData[0].numbers);
-console.log(graphData[0].city);
+console.log(artistName);
 
-localStorage.removeItem("graph-data");
+// localStorage.removeItem("graph-data");
 
 // graph logic to show monthly listeners
 
@@ -21,8 +25,8 @@ google.charts.setOnLoadCallback(drawChart);
 function drawChart() {
   //   for (var i = 0; i < graph.length; i++) {}
   var data = google.visualization.arrayToDataTable([
-    ["Cities", "Toronto", "Toyoko", "New York"],
-    ["Beyonce", 109000, 40000, 20000],
+    ["Cities", city1, city2, city3],
+    [artistName, listenersByCity1, listenersByCity2, listenersByCity3],
   ]);
 
   var options = {

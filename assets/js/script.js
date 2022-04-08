@@ -17,7 +17,7 @@ var getSearch = function (searchCriteria) {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
+      "X-RapidAPI-Key": "1580afc537msh1a6caff87fc91b8p17ece1jsn2c0754e91a4b",
     },
   };
 
@@ -305,7 +305,6 @@ buttonEl.addEventListener("click", function (event) {
   console.log(selectedBtn);
 });
 
-
 $("#display-container").on("click", ".play-btn", function () {
   var audioSrc = $(this).attr("data-play");
   var audio = new Audio(audioSrc);
@@ -330,54 +329,53 @@ $("#display-container").on("click", ".play-btn", function () {
 //set options to fetch lyrics url
 
 // var getLyrics = function(trackId) {
-    
-//   }
-  // console.log(lyricsLinkEl);
-  // var checkElement = document.querySelector(".show-lyrics");
-  // console.log(checkElement);
-$("#display-container").on("click", ".lyrics-btn", function () {
 
+//   }
+// console.log(lyricsLinkEl);
+// var checkElement = document.querySelector(".show-lyrics");
+// console.log(checkElement);
+$("#display-container").on("click", ".lyrics-btn", function () {
   // var showLyrics = $(this).attr.text(displayLyrics);
   var trackId = $(this).attr("trackId").substr(14);
   console.log(trackId);
   // getLyrics(trackId);
 
   const options = {
-    method: 'GET',
+    method: "GET",
     headers: {
-        'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
-        'X-RapidAPI-Key': '8953cc16a8msh362e3da83f41059p119f26jsn264a41186942'
-    }
+      "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
+      "X-RapidAPI-Key": "1580afc537msh1a6caff87fc91b8p17ece1jsn2c0754e91a4b",
+    },
   };
 
-  fetch('https://spotify23.p.rapidapi.com/track_lyrics/?id=' + trackId, options)
-    .then(response => response.json())
-    .then(function(response) {
-        console.log(response);
-        showLyrics(response);
+  fetch("https://spotify23.p.rapidapi.com/track_lyrics/?id=" + trackId, options)
+    .then((response) => response.json())
+    .then(function (response) {
+      console.log(response);
+      showLyrics(response);
     })
     // if error show the error
     .catch((err) => console.error(err));
 
-// create click event for lyricsBtnEl
-// console.log(getLyrics);
-// search by Lyrics
+  // create click event for lyricsBtnEl
+  // console.log(getLyrics);
+  // search by Lyrics
 });
 
 var showLyrics = function (data) {
-    var lyricsData= [];
-    //   var lyricsData = data.response.lyrics.lyrics[i].body.html;
-    for (var i = 0; i < data.lyrics.lines.length; i++) {
-        var lyricsLine = data.lyrics.lines[i].words; 
-        var tempArr = {
-            line: lyricsLine
-        };
-        lyricsData.push(tempArr);
-    }
-    console.log(lyricsData);
-    //store the lyrics data into local storage
-    localStorage.setItem("Lyrics", JSON.stringify(lyricsData));
-}
+  var lyricsData = [];
+  //   var lyricsData = data.response.lyrics.lyrics[i].body.html;
+  for (var i = 0; i < data.lyrics.lines.length; i++) {
+    var lyricsLine = data.lyrics.lines[i].words;
+    var tempArr = {
+      line: lyricsLine,
+    };
+    lyricsData.push(tempArr);
+  }
+  console.log(lyricsData);
+  //store the lyrics data into local storage
+  localStorage.setItem("Lyrics", JSON.stringify(lyricsData));
+};
 
 // displaying cities by users
 $("#display-container").on("click", ".country-btn", function (event) {
@@ -387,7 +385,7 @@ $("#display-container").on("click", ".country-btn", function (event) {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      "X-RapidAPI-Key": "8953cc16a8msh362e3da83f41059p119f26jsn264a41186942",
+      "X-RapidAPI-Key": "1580afc537msh1a6caff87fc91b8p17ece1jsn2c0754e91a4b",
     },
   };
 
@@ -406,10 +404,14 @@ $("#display-container").on("click", ".country-btn", function (event) {
       for (var i = 0; i < 3; i++) {
         var numberOfListeners = topCities.items[i].numberOfListeners;
         var listenersByCity = topCities.items[i].city;
+        var artistName = data.data.artist.profile.name;
+        console.log(artistName);
         var tempArr = {
           numbers: numberOfListeners,
           city: listenersByCity,
+          artist: artistName,
         };
+        console.log(tempArr);
         citiesUsers.push(tempArr);
       }
 
