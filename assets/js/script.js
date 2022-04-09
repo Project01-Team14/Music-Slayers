@@ -10,7 +10,7 @@ var data = "";
 var songPreview = "";
 var listEl = "";
 var resultData = "";
-var spotifyKey = "fa06e9e5f6msh6017d59f2cbd573p1e1089jsnc05d29dcf8d8";
+var spotifyKey = "e1574ce24bmshb618600d41a7010p1ec78ejsn0dc9ca4741c2";
 ///////////////////////////////////////////////////////front page
 $(".main").append("<div class='remove'></div>")
 var genreList = function (title,data,id){
