@@ -10,14 +10,11 @@ var resultData = "";
 var recent5Searches = [];
 var spotifyKey = "e1574ce24bmshb618600d41a7010p1ec78ejsn0dc9ca4741c2";
 ///////////////////////////////////////////////////////front page//////////////////////////////////////////////
-$(".main").append("<div class='remove'></div>");
-var genreList = function (title, data, id) {
-  $(".remove").append(
-    "<h2 class='p-4' id='result-subtitle'>" + title + "</h2>"
-  );
-  $(".remove").append(
-    "<div class='list" + id + " flex space-x-5 p-3 overflow-scroll'></div>"
-  );
+$(".main").append("<div class='remove'></div>")
+var genreList = function (title,data,id){
+ 
+  $(".remove").append("<h2 class='p-4' id='result-subtitle'>"+title+"</h2>")
+  $(".remove").append("<div class='list"+id+" flex space-x-5 p-3 overflow-scroll'></div>" );
   for (var i = 0; i < 7; i++) {
     $(".list" + id).append(
       "<img class ='h-32 w-32 'src='https://e-cdns-images.dzcdn.net/images/cover/" +
@@ -109,13 +106,14 @@ $(document).ready(function () {
     .catch((err) => console.error(err));
 });
 
-////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////Second page/////////////////////////////////////////////////////
 // fetch data from spotify
 var getSearch = function (searchCriteria) {
   const options = {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
+    
       "X-RapidAPI-Key": spotifyKey,
     },
   };
@@ -619,7 +617,8 @@ var globalTop10 = function () {
 // globalTop10();
 
 // local storage
-var saveRecentSearches = function (data) {
-  localStorage.setItem("mostRecentSearch", JSON.stringify(data));
-  console.log(data);
-};
+// 
+// };var saveRecentSearches = function (data) {
+//   var searches = searchEl.value;
+//   localStorage.setItem("mostRecentSearch", searches);
+// globalTop10();
