@@ -576,14 +576,25 @@ var saveRecentSearches = function (data) {
 
 var loadSearches = function() {
   recent5Searches = JSON.parse(localStorage.getItem("mostRecentSearch"));
-
+  
   if (recent5Searches) {
-    for (var i = 4; i < recent5Searches.length; i--) {
-      $(".search-history").append("<div class='history-btn-container'><button type='button' id='recent-search-btn'>" + recent5Searches[i].search + "</button></div>");
-    }  
+    var historyContainerEl = $("<div>").addClass("history-btn-container");
+
+    for (var i = 0; i < recent5Searches.length; i++) {
+      historyContainerEl.prepend("<button type='button' class='history-btn'>" + recent5Searches[i].search + "</button>");
+    }
+
+    $(".search-history").append(historyContainerEl);
   } else {
     recent5Searches = [];
   }
 }
 
 loadSearches();
+
+$(".search-history").on("click", ".history-btn", function() {
+  recent5Searches = JSON.parse(localStorage.getItem("mostRecentSearch"));
+
+  var searchCriteria = $(this).text().trim();
+  console.log(searchCriteria);
+})
