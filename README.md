@@ -63,6 +63,7 @@ https://github.com/Project01-Team14/Music-Slayers
 GitHub Project Board - 
 https://github.com/users/Project01-Team14/projects/1?add_cards_query=is%3Aopen
 
+
 ## Contributors
 
 -Satwinder: Frontend design (HTML, CSS, Tailwind).
