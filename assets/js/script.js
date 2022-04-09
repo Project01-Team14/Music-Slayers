@@ -597,4 +597,9 @@ $(".search-history").on("click", ".history-btn", function() {
 
   var searchCriteria = $(this).text().trim();
   console.log(searchCriteria);
+  for (var i = 0; i < recent5Searches.length; i++) {
+    if (recent5Searches[i].search === searchCriteria) {
+      createSongList
+    }
+  }
 })
