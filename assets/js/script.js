@@ -1,8 +1,5 @@
 var searchEl = document.querySelector(".form-control");
 var buttonEl = document.querySelector(".btn");
-var songsEl = document.querySelector(".songs");
-var artistEl = document.querySelector(".artists");
-var albumEl = document.querySelector(".album");
 
 var searchCriteria = "";
 var selectedBtn = "";
@@ -12,7 +9,6 @@ var listEl = "";
 var resultData = "";
 
 var recent5Searches = [];
-var searchesArr = {};
 
 // fetch data from spotify
 var getSearch = function (searchCriteria) {
@@ -43,6 +39,9 @@ var createSongList = function (response) {
   if ($(".song-list") !== null) {
     $(".song-list").detach();
   }
+  var searchesArr = [
+    searchCriteria,
+  ];
 
   var listEl = $("<ul>").addClass("song-list");
   for (var i = 0; i < 10; i++) {
@@ -59,15 +58,16 @@ var createSongList = function (response) {
       albumId: data.albumOfTrack.id,
       albumCover: data.albumOfTrack.coverArt.sources[1].url,
       playability: data.playability.playable,
-      searchCriteria: searchCriteria,
     };
-    recent5Searches.push(resultData);
+    searchesArr.push(resultData);
     console.log(resultData);
 
     createSongListElements(resultData, listEl);
   }
 
   $("#display-container").append(listEl);
+
+  recent5Searches.push(searchesArr);
   saveRecentSearches(recent5Searches);
 
   var checkElement = document.querySelector(".song-list");
@@ -321,6 +321,6 @@ var globalTop10 = function () {
 
 // local storage
 var saveRecentSearches = function (data) {
-  var searches = searchEl.value;
-  localStorage.setItem("mostRecentSearch", searches);
+  localStorage.setItem("mostRecentSearch", JSON.stringify(data));
+  console.log(data);
 };
