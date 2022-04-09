@@ -10,8 +10,8 @@ var data = "";
 var songPreview = "";
 var listEl = "";
 var resultData = "";
-var spotifyKey = "fa06e9e5f6msh6017d59f2cbd573p1e1089jsnc05d29dcf8d8";
-///////////////////////////////////////////////////////front page
+var spotifyKey = "e1574ce24bmshb618600d41a7010p1ec78ejsn0dc9ca4741c2";
+///////////////////////////////////////////////////////front page//////////////////////////////////////////////
 $(".main").append("<div class='remove'></div>")
 var genreList = function (title,data,id){
  
@@ -120,17 +120,14 @@ $( document ).ready(function() {
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////Second page/////////////////////////////////////////////////////
 // fetch data from spotify
 var getSearch = function (searchCriteria) {
   const options = {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      // "X-RapidAPI-Key": "1580afc537msh1a6caff87fc91b8p17ece1jsn2c0754e91a4b",
-      // "X-RapidAPI-Key": "5003fe75dfmsh0f334db1cf62272p1a7baejsnfece449346a2",
-      // "X-RapidAPI-Key": "fa06e9e5f6msh6017d59f2cbd573p1e1089jsnc05d29dcf8d8",
-      // "X-RapidAPI-Key": "fa06e9e5f6msh6017d59f2cbd573p1e1089jsnc05d29dcf8d8",
+    
       "X-RapidAPI-Key": spotifyKey,
     },
   };
@@ -553,4 +550,4 @@ var globalTop10 = function () {
     .catch((err) => console.error(err));
 };
 
-globalTop10();
+// globalTop10();
