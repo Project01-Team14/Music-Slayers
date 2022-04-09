@@ -617,8 +617,7 @@ var globalTop10 = function () {
 // globalTop10();
 
 // local storage
-// 
-// };var saveRecentSearches = function (data) {
-//   var searches = searchEl.value;
-//   localStorage.setItem("mostRecentSearch", searches);
-// globalTop10();
+var saveRecentSearches = function (data) {
+  var searches = searchEl.value;
+  localStorage.setItem("mostRecentSearch", searches);
+};
