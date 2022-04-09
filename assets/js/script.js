@@ -1,8 +1,5 @@
 var searchEl = document.querySelector(".form-control");
 var buttonEl = document.querySelector(".btn");
-var songsEl = document.querySelector(".songs");
-var artistEl = document.querySelector(".artists");
-var albumEl = document.querySelector(".album");
 
 var searchCriteria = "";
 var selectedBtn = "";
@@ -10,101 +7,109 @@ var data = "";
 var songPreview = "";
 var listEl = "";
 var resultData = "";
+var recent5Searches = [];
 var spotifyKey = "e1574ce24bmshb618600d41a7010p1ec78ejsn0dc9ca4741c2";
+
 ///////////////////////////////////////////////////////front page//////////////////////////////////////////////
 $(".main").append("<div class='remove'></div>")
-var genreList = function (title,data,id){
- 
-  $(".remove").append("<h2 class='p-4' id='result-subtitle'>"+title+"</h2>")
-  $(".remove").append("<div class='list"+id+" flex space-x-5 p-3 overflow-scroll'></div>" );
-  for (var i = 0; i < 7; i++) {
-    $(".list" + id).append(
-      "<img class ='h-32 w-32 'src='https://e-cdns-images.dzcdn.net/images/cover/" +
-        data.tracks.data[i].album.md5_image +
-        "/250x250-000000-80-0-0.jpg' alt=''></img>"
-    );
+  var genreList = function (title,data,id){
+  
+    $(".remove").append("<h2 class='p-4' id='result-subtitle'>"+title+"</h2>")
+    $(".remove").append("<div class='list"+id+" flex space-x-5 p-3 overflow-scroll'></div>" );
+    for (var i = 0; i < 7; i++) {
+    $(".list"+id).append("<img class ='h-32 w-32 'src='https://e-cdns-images.dzcdn.net/images/cover/"+data.tracks.data[i].album.md5_image+"/250x250-000000-80-0-0.jpg' alt=''></img>");
   }
-};
+}
 
-$(document).ready(function () {
-  fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/7277496744", {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
-    },
-  })
+$( document ).ready(function() {
+  fetch(
+    "https://deezerdevs-deezer.p.rapidapi.com/playlist/7277496744",
+    {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+        "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
+      },
+    })
     .then((response) => response.json())
-    .then(function (data) {
+     .then(function (data) {
       var title = "Pop music";
       var id = "pop";
       console.log(data);
-      genreList(title, data, id);
-    })
+      genreList(title,data,id);
+     })
     .catch((err) => console.error(err));
 
-  fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/8053794282", {
+  fetch(
+    "https://deezerdevs-deezer.p.rapidapi.com/playlist/8053794282",
+    {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
       "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
     },
-  })
-    .then((response) => response.json())
-    .then(function (data) {
-      var title = "Classic Songs";
-      var id = "classic";
-      console.log(data);
-      genreList(title, data, id);
     })
+    .then((response) => response.json())
+      .then(function (data) {
+        var title = "Classic Songs";
+        var id = "classic";
+        console.log(data);
+        genreList(title,data,id);
+      })
     .catch((err) => console.error(err));
 
-  fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/1615514485", {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
-    },
-  })
-    .then((response) => response.json())
-    .then(function (data) {
-      var title = "Jazz Music";
-      var id = "jazz";
-      console.log(data);
-      genreList(title, data, id);
+  fetch(
+    "https://deezerdevs-deezer.p.rapidapi.com/playlist/1615514485",
+    {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+        "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
+      },
     })
+    .then((response) => response.json())
+      .then(function (data) {
+        var title = "Jazz Music";
+        var id = "jazz";
+        console.log(data);
+        genreList(title,data,id);
+      })
     .catch((err) => console.error(err));
 
-  fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/914651125", {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
-    },
-  })
-    .then((response) => response.json())
-    .then(function (data) {
-      var title = "Chill and relax";
-      var id = "chill";
-      console.log(data);
-      genreList(title, data, id);
+  fetch(
+    "https://deezerdevs-deezer.p.rapidapi.com/playlist/914651125",
+    {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+        "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
+      },
     })
+    .then((response) => response.json())
+      .then(function (data) {
+        var title = "Chill and relax";
+        var id = "chill";
+        console.log(data);
+        genreList(title,data,id);
+      })
     .catch((err) => console.error(err));
 
-  fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/1154685481", {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
-    },
-  })
-    .then((response) => response.json())
-    .then(function (data) {
-      var title = "Sports music";
-      var id = "sports";
-      console.log(data);
-      genreList(title, data, id);
+  fetch(
+    "https://deezerdevs-deezer.p.rapidapi.com/playlist/1154685481",
+    {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+        "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
+      },
     })
+    .then((response) => response.json())
+      .then(function (data) {
+        var title = "Sports music";
+        var id = "sports";
+        console.log(data);
+        genreList(title,data,id);
+      })
     .catch((err) => console.error(err));
 });
 
@@ -115,7 +120,6 @@ var getSearch = function (searchCriteria) {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-    
       "X-RapidAPI-Key": spotifyKey,
     },
   };
@@ -140,7 +144,9 @@ var createSongList = function (response) {
   if ($(".song-list") !== null) {
     $(".song-list").detach();
   }
-  $(".main").append("<div class='remove'></div>");
+
+  $(".main").append("<div class='remove'></div>")
+
   // var listEl = $("<ul>").addClass("song-list");
   ///////////////////////////////////////////////////////////////////////////////Lyrics/////////////////////////////////////
   //   var displayLyrics = JSON.parse(localStorage.getItem("Lyrics"));
@@ -149,7 +155,7 @@ var createSongList = function (response) {
   // console.log(displayLyrics)
   // for (var i = 0; i < displayLyrics.length; i++) {
   //   var pEl= $("<p>")
-  //     .attr("id", "paragraph")
+  //     .attr("id", "paragraph")  
   //     .html(displayLyrics[i].line);
   //   divEl.append(pEl);
   // }
@@ -163,10 +169,14 @@ var createSongList = function (response) {
   // localStorage.removeItem("Lyrics");
   ////////////////////////////////////////
 
+  console.log(recent5Searches);
+  var tempArr = {
+    search: searchCriteria,
+    result: [],
+  }
+
   for (var i = 0; i < 10; i++) {
     data = response.tracks.items[i].data;
-
-    // getMusicData(data.name, data.artists.items[0].profile.name);
 
     resultData = {
       trackName: data.name,
@@ -177,13 +187,15 @@ var createSongList = function (response) {
       albumId: data.albumOfTrack.id,
       albumCover: data.albumOfTrack.coverArt.sources[1].url,
       playability: data.playability.playable,
-      searchCriteria: searchCriteria,
     };
-    recent5Searches.push(resultData);
     console.log(resultData);
+    tempArr.result.push(resultData);
 
-    createSongListElements(resultData, i);
+    createSongListElements(resultData,i);
   }
+
+  recent5Searches.push(tempArr);
+  saveRecentSearches(recent5Searches);
 };
 
 // $("#display-container").append(listEl);
@@ -202,72 +214,29 @@ var createSongList = function (response) {
 //   }
 // };
 
-var createSongListElements = function (data, i) {
-  $(".remove").append("<div class='songContain" + i + " p-3 '></div>");
-  $(".songContain" + i).append(
-    "<div class='songMain" + i + " flex p-3'></div>"
-  );
-  // $(".songContain"+i).append("<p class='lyricsLines"+i+" h-64 overflow-auto'></p>")
-  $(".songMain" + i).append("<div class='songMainLeft" + i + " '></div>");
-  $(".songMain" + i).append(
-    "<div class='songMainRight" + i + " pl-3 flex-1'></div>"
-  );
-  $(".songMainLeft" + i).append(
-    "<img class='h-40 w-40' src='" +
-      data.albumCover +
-      "' alt='" +
-      data.artistName +
-      "'s album " +
-      data.albumName +
-      "'></img>"
-  );
-  // var listItemEl = $("<li>").addClass("song-item");
-  $(".songMainRight" + i).append(
-    "<h3 class='song-title text-lg font-bold'>" + data.trackName + "<h3>"
-  );
-  $(".songMainRight" + i).append(
-    "<p class='song-info'>Artist name:  " + data.artistName + "</p>"
-  );
-  $(".songMainRight" + i).append(
-    "<p class='song-info'>Album name:  " + data.albumName + "</p>"
-  );
+var createSongListElements = function (data,i) {
+  $(".remove").append("<div class='songContain"+i+" p-3 '></div>")
 
-  $(".songMainRight" + i).append(
-    "<div class='buttons justify-end flex mt-3 '></div>"
-  );
-  $(".songMainRight" + i).append(
-    "<button trackIndex='" +
-      i +
-      "' trackInsert='lyricsLines" +
-      i +
-      "' trackId='" +
-      data.trackUri +
-      "' class='lyrics-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Lyrics</button>"
-  );
-  // $(".remove").append("<a href=./display-lyrics.html?track=" + data.trackName ")
-  $(".songMainRight" + i).append(
-    "<button playability='" +
-      data.playability +
-      "' trackId='" +
-      data.trackUri +
-      "' trackIndex='" +
-      i +
-      "' class='play-btn play" +
-      i +
-      " ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Play</button>"
-  );
-  $(".songMainRight" + i).append(
-    "<button  trackIndex='" +
-      i +
-      "' trackInsert='lyricsLines" +
-      i +
-      "' artistId='" +
-      data.artistUri +
-      "' class='country-btn ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>" +
-      "Followers" +
-      "</button>"
-  );
+  $(".songContain"+i).append("<div class='songMain"+i+" flex p-3'></div>")
+  // $(".songContain"+i).append("<p class='lyricsLines"+i+" h-64 overflow-auto'></p>")
+  
+  $(".songMain"+i).append("<div class='songMainLeft"+i+" '></div>")
+  $(".songMain"+i).append("<div class='songMainRight"+i+" pl-3 flex-1'></div>")
+
+  $(".songMainLeft"+i).append("<img class='h-40 w-40' src='"+data.albumCover+"' alt='"+data.artistName + "'s album " + data.albumName+"'></img>");
+  
+  // var listItemEl = $("<li>").addClass("song-item");
+
+  $(".songMainRight"+i).append("<h3 class='song-title text-lg font-bold'>"+data.trackName+"<h3>");
+  $(".songMainRight"+i).append("<p class='song-info'>Artist name:  "+data.artistName+"</p>");
+  $(".songMainRight"+i).append("<p class='song-info'>Album name:  "+data.albumName+"</p>")
+  $(".songMainRight"+i).append("<div class='buttons justify-end flex mt-3 '></div>")
+  $(".songMainRight"+i).append("<button trackIndex='"+i+"' trackInsert='lyricsLines"+i+"' trackId='"+data.trackUri+"' class='lyrics-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Lyrics</button>");
+  // $(".remove").append("<a href=./display-lyrics.html?track=" + data.trackName ") 
+  $(".songMainRight"+i).append("<button playability='"+data.playability+"' trackId='"+data.trackUri+"' trackIndex='"+i+"' class='play-btn play"+i+" ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Play</button>");
+  $(".songMainRight"+i).append("<button  trackIndex='"+i+"' trackInsert='lyricsLines"+i+"' artistId='"+data.artistUri+"' class='country-btn ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>"+"Followers"+"</button>");
 };
+
 // var albumImageEl = $("<img>")
 //   .attr("src", data.albumCover)
 //   .attr("alt", data.artistName + "'s album " + data.albumName);
@@ -293,6 +262,7 @@ var createSongListElements = function (data, i) {
 //   .html("Play");
 // listeners by country data showed on page.
 
+
 // Later//////////////////////////////////////////////////////////////
 // var listenersByCity = $("<button>")
 //   .attr("type", "button")
@@ -316,25 +286,28 @@ var createSongListElements = function (data, i) {
 //   listEl.append(listItemEl);
 // };
 ///////////////////////////////////////////////////////////////////////////
+
+
 //Add event listener button
 buttonEl.addEventListener("click", function (event) {
   event.preventDefault();
+
   $(".remove").remove();
   // $(".main").append("<div class='remove'></div>")
-  //   // get user's search criteria
+  // get user's search criteria
   searchCriteria = searchEl.value;
-  searchCriteria =
-    searchCriteria.charAt(0).toUpperCase() + searchCriteria.slice(1);
+  searchCriteria = searchCriteria.charAt(0).toUpperCase() + searchCriteria.slice(1);
   console.log(searchCriteria);
   // searchCriteria = "hello";
 
   getSearch(searchCriteria);
 });
+
 /////////////////////////////////////////////////////////////////////////////////
 $("#display-container").on("click", ".play-btn", function () {
   var playability = $(this).attr("playability");
   var trackId = $(this).attr("trackId").substr(14);
-  var trackUri = $(this).attr("trackId");
+  // var trackUri = $(this).attr("trackId");
   var trackIndex = $(this).attr("trackIndex");
   if (playability) {
     const options = {
@@ -383,9 +356,7 @@ $("#display-container").on("click", ".lyrics-btn", function () {
   console.log("Append data is " + trackApend);
   console.log(trackId);
   // getLyrics(trackId);
-  $(".songContain" + trackIndex).append(
-    "<p class='" + trackApend + " h-64 overflow-auto'></p>"
-  );
+  $(".songContain"+trackIndex).append("<p class='"+trackApend+" h-64 overflow-auto'></p>")
   const options = {
     method: "GET",
     headers: {
@@ -398,19 +369,19 @@ $("#display-container").on("click", ".lyrics-btn", function () {
     .then((response) => response.json())
     .then(function (data) {
       var lyricsData = [];
-
+       
       for (var i = 0; i < data.lyrics.lines.length; i++) {
         var lyricsLine = data.lyrics.lines[i].words;
         var line = JSON.stringify(lyricsLine);
         var tempArr = {
           line: lyricsLine,
         };
-
-        $("." + trackApend).append("<strong>" + line + "</strong>");
+        
+        $("."+trackApend).append("<strong>"+line+"</strong>")
         lyricsData.push(tempArr);
       }
       console.log(lyricsData);
-
+      
       //store the lyrics data into local storage
       localStorage.setItem("Lyrics", JSON.stringify(lyricsData));
     })
@@ -427,7 +398,7 @@ $("#display-container").on("click", ".country-btn", function (event) {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      "X-RapidAPI-Key": spotifyKey,
+      "X-RapidAPI-Key":spotifyKey,
     },
   };
 
@@ -528,10 +499,10 @@ $("#display-container").on("click", ".country-btn", function (event) {
 //   };
 // }
 
-// }
+// } 
+
 
 // creating a top 10 global playlist
-
 var globalTop10 = function () {
   const options = {
     method: "GET",
@@ -558,22 +529,10 @@ var globalTop10 = function () {
           albumCover: data.content[i].thumbnail,
           artistName: data.content[i].artists[0],
         };
-        $(".topArtists").append("<div class='top" + i + "'><div>");
-        $(".top" + i).append(
-          "<img src='" +
-            top10.albumCover +
-            "' alt ='" +
-            top10.artistName +
-            "'></img>"
-        );
-        $(".top" + i).append(
-          "<h3 class='song-titile text-lg font-medium'>" +
-            top10.trackName +
-            "</h3>"
-        );
-        $(".top" + i).append(
-          "<p class='song-info mb-3'>" + top10.artistName + "</p>"
-        );
+        $(".topArtists").append("<div class='top"+i+"'><div>")
+        $(".top"+i).append("<img src='"+top10.albumCover+"' alt ='"+top10.artistName+"'></img>");
+        $(".top"+i).append("<h3 class='song-titile text-lg font-medium'>"+top10.trackName+"</h3>");
+        $(".top"+i).append("<p class='song-info mb-3'>"+top10.artistName+"</p>");
         // var listItemEl = $("<li>").addClass("song-item");
 
         // var albumImageEl = $("<img>")
@@ -596,8 +555,35 @@ var globalTop10 = function () {
 // globalTop10();
 
 // local storage
-// 
-// };var saveRecentSearches = function (data) {
-//   var searches = searchEl.value;
-//   localStorage.setItem("mostRecentSearch", searches);
-// globalTop10();
+var saveRecentSearches = function (data) {
+  // create button elements in recent history area until it reaches five
+  $(".history-btn-container").remove();
+
+  if (data.length >= 6) {
+    recent5Searches = [];
+
+    for (var i = 1; i < 6; i++) {
+      console.log(recent5Searches);
+      recent5Searches.push(data[i]);  
+    }
+    console.log(recent5Searches);
+  }
+
+  // save search items to localStorage
+  localStorage.setItem("mostRecentSearch", JSON.stringify(recent5Searches));
+  loadSearches();
+};
+
+var loadSearches = function() {
+  recent5Searches = JSON.parse(localStorage.getItem("mostRecentSearch"));
+
+  if (recent5Searches) {
+    for (var i = 4; i < recent5Searches.length; i--) {
+      $(".search-history").append("<div class='history-btn-container'><button type='button' id='recent-search-btn'>" + recent5Searches[i].search + "</button></div>");
+    }  
+  } else {
+    recent5Searches = [];
+  }
+}
+
+loadSearches();
