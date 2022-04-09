@@ -50,6 +50,8 @@ THEN I am taken to the contact me page to put contact information.
 
 ## Screenshots
 
+## Demo Clip
+
 ## Links to Application
 
 Deployed:
