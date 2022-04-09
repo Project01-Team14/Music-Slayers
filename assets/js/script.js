@@ -7,17 +7,18 @@ var data = "";
 var songPreview = "";
 var listEl = "";
 var resultData = "";
-// var recent5Searches = [];
+var recent5Searches = [];
 var spotifyKey = "e1574ce24bmshb618600d41a7010p1ec78ejsn0dc9ca4741c2";
+
 ///////////////////////////////////////////////////////front page//////////////////////////////////////////////
 $(".main").append("<div class='remove'></div>")
-var genreList = function (title,data,id){
- 
-  $(".remove").append("<h2 class='p-4' id='result-subtitle'>"+title+"</h2>")
-  $(".remove").append("<div class='list"+id+" flex space-x-5 p-3 overflow-scroll'></div>" );
-  for (var i = 0; i < 7; i++) {
-  $(".list"+id).append("<img class ='h-32 w-32 'src='https://e-cdns-images.dzcdn.net/images/cover/"+data.tracks.data[i].album.md5_image+"/250x250-000000-80-0-0.jpg' alt=''></img>");
-}
+  var genreList = function (title,data,id){
+  
+    $(".remove").append("<h2 class='p-4' id='result-subtitle'>"+title+"</h2>")
+    $(".remove").append("<div class='list"+id+" flex space-x-5 p-3 overflow-scroll'></div>" );
+    for (var i = 0; i < 7; i++) {
+    $(".list"+id).append("<img class ='h-32 w-32 'src='https://e-cdns-images.dzcdn.net/images/cover/"+data.tracks.data[i].album.md5_image+"/250x250-000000-80-0-0.jpg' alt=''></img>");
+  }
 }
 
 $( document ).ready(function() {
@@ -168,9 +169,10 @@ var createSongList = function (response) {
   // localStorage.removeItem("Lyrics");
   ////////////////////////////////////////
 
-  var recent5Searches = {
-    searchCriteria: searchCriteria,
-    searches: [],
+  console.log(recent5Searches);
+  var tempArr = {
+    search: searchCriteria,
+    result: [],
   }
 
   for (var i = 0; i < 10; i++) {
@@ -187,11 +189,12 @@ var createSongList = function (response) {
       playability: data.playability.playable,
     };
     console.log(resultData);
-    recent5Searches.searches.push(resultData);
+    tempArr.result.push(resultData);
 
     createSongListElements(resultData,i);
   }
 
+  recent5Searches.push(tempArr);
   saveRecentSearches(recent5Searches);
 };
 
@@ -553,5 +556,34 @@ var globalTop10 = function () {
 
 // local storage
 var saveRecentSearches = function (data) {
-  localStorage.setItem("mostRecentSearch", JSON.stringify(data));
+  // create button elements in recent history area until it reaches five
+  $(".history-btn-container").remove();
+
+  if (data.length >= 6) {
+    recent5Searches = [];
+
+    for (var i = 1; i < 6; i++) {
+      console.log(recent5Searches);
+      recent5Searches.push(data[i]);  
+    }
+    console.log(recent5Searches);
+  }
+
+  // save search items to localStorage
+  localStorage.setItem("mostRecentSearch", JSON.stringify(recent5Searches));
+  loadSearches();
 };
+
+var loadSearches = function() {
+  recent5Searches = JSON.parse(localStorage.getItem("mostRecentSearch"));
+
+  if (recent5Searches) {
+    for (var i = 4; i < recent5Searches.length; i--) {
+      $(".search-history").append("<div class='history-btn-container'><button type='button' id='recent-search-btn'>" + recent5Searches[i].search + "</button></div>");
+    }  
+  } else {
+    recent5Searches = [];
+  }
+}
+
+loadSearches();
