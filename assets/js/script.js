@@ -423,12 +423,6 @@ var globalTop10 = function () {
         $(".top" + i).append(
           "<p class='song-info mb-3'>" + top10.artistName + "</p>"
         );
-
-        $(".topArtists").append("<div class='top" + i + "'><div>");
-        
-        $(".top" + i).append("<img src='" + top10.albumCover + "' alt ='" + top10.artistName + "'></img>");
-        $(".top" + i).append("<h3 class='song-titile text-lg font-medium'>" + top10.trackName + "</h3>");
-        $(".top" + i).append("<p class='song-info mb-3'>" + top10.artistName + "</p>");
       }
     })
     .catch((err) => console.error(err));
