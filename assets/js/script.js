@@ -5,7 +5,7 @@ var searchCriteria = "";
 var data = "";
 var resultData = "";
 var recent5Searches = [];
-var spotifyKey = "e1574ce24bmshb618600d41a7010p1ec78ejsn0dc9ca4741c2";
+var spotifyKey = "e9e794b108mshaae6cf85014f437p165fa3jsn8f4bc7c5e72e";
 
 ///////////////////////////////////////////////////////front page//////////////////////////////////////////////
 $(".main").append("<div class='remove'></div>");
