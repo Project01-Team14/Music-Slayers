@@ -5,10 +5,10 @@ var searchCriteria = "";
 var data = "";
 var resultData = "";
 var recent5Searches = [];
-var spotifyKey = "e9e794b108mshaae6cf85014f437p165fa3jsn8f4bc7c5e72e";
+var spotifyKey = "fa06e9e5f6msh6017d59f2cbd573p1e1089jsnc05d29dcf8d8";
 
 ///////////////////////////////////////////////////////front page//////////////////////////////////////////////
-$(".main").append("<div class='remove'></div>");
+
 
 var genreList = function (title,data,id) {
   $(".remove").append("<h2 class='p-4' id='result-subtitle'>" + title + "</h2>");
@@ -19,7 +19,8 @@ var genreList = function (title,data,id) {
   }
 }
 
-$(document).ready(function () {
+var frontPage = function () {
+  $(".main").append("<div class='remove'></div>");
   fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/7277496744", {
     method: "GET",
     headers: {
@@ -106,8 +107,8 @@ $(document).ready(function () {
         genreList(title,data,id);
       })
     .catch((err) => console.error(err));
-});
-
+};
+frontPage();
 /////////////////////////////////////////////////////////Second page/////////////////////////////////////////////////////
 // fetch data from spotify
 var getSearch = function (searchCriteria) {
@@ -133,8 +134,8 @@ var getSearch = function (searchCriteria) {
 
 // create song list and show it on result area
 var createSongList = function (response) {
-  $(".main").append("<div class='remove'></div>")
-
+  $(".main").append("<div class='remove '></div>")
+  $(".remove").append("<button class='back ml-1 mt-3 bg-cyan-800 hover:bg-cyan-400 text-white font-bold py-2 px-4 rounded-full' id='back'>Go Back</button>")
   var tempArr = {
     search: searchCriteria,
     result: [],
@@ -164,7 +165,7 @@ var createSongList = function (response) {
 };
 
 var createSongListElements = function (data,i) {
-  $(".remove").append("<div class='songContain" + i + " p-3 '></div>")
+  $(".remove").append("<div class='songContain" + i + " p-3 ' ></div>")
 
   $(".songContain" + i).append(
     "<div class='songMain" + i + " flex p-3'></div>"
@@ -247,6 +248,10 @@ buttonEl.addEventListener("click", function (event) {
   getSearch(searchCriteria);
 });
 
+$("#display-container").on("click", ".back", function () {
+  $(".remove").remove();
+  frontPage();
+});
 /////////////////////////////////////////////////////////////////////////////////
 $("#display-container").on("click", ".play-btn", function () {
   var playability = $(this).attr("playability");
@@ -339,7 +344,9 @@ $("#display-container").on("click", ".lyrics-btn", function () {
 // displaying cities by users
 $("#display-container").on("click", ".country-btn", function (event) {
   var artistId = $(this).attr("artistId").substr(15);
-
+  var trackApend = $(this).attr("trackInsert");
+  var trackIndex = $(this).attr("trackIndex");
+  console.log(artistId);
   const options = {
     method: "GET",
     headers: {
@@ -374,12 +381,78 @@ $("#display-container").on("click", ".country-btn", function (event) {
       }
 
       localStorage.setItem("graph-data", JSON.stringify(citiesUsers));
-      graphBar();
+      graphBar(trackApend,trackIndex);
       console.log(JSON.parse(localStorage.getItem("graph-data")));
       console.log(citiesUsers);
     })
     .catch((err) => console.error(err));
 });
+////////////////////////////////////graph////////////////////////////
+var graphBar = function (trackApend,trackIndex){
+  console.log("trying herer"+trackIndex)
+  $(".lyricsRemove").remove();
+  $(".songContain" + trackIndex).append(
+    "<div class='graph" + trackApend + "  h-64 overflow-auto lyricsRemove'  id='graph"+trackIndex + "'></div>"
+  );
+  var graphData = JSON.parse(localStorage.getItem("graph-data"));
+
+  var city1 = graphData[0].city;
+var listenersByCity1 = graphData[0].numbers;
+
+var city2 = graphData[1].city;
+var listenersByCity2 = graphData[1].numbers;
+
+var city3 = graphData[2].city;
+var listenersByCity3 = graphData[2].numbers;
+
+var artistName = graphData[1].artist;
+console.log(graphData);
+console.log(artistName);
+
+// localStorage.removeItem("graph-data");
+
+// graph logic to show monthly listeners
+
+google.charts.load("current", {
+  packages: ["bar"],
+});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+  //   for (var i = 0; i < graph.length; i++) {}
+  var data = google.visualization.arrayToDataTable([
+    ["Cities", city1, city2, city3],
+    [artistName, listenersByCity1, listenersByCity2, listenersByCity3],
+  ]);
+
+  var options = {
+    chart: {
+      title: "Users by Cities",
+      subtitle: "Monthly Listeners Per Month",
+    },
+    bars: "horizontal", // Required for Material Bar Charts.
+    hAxis: {
+      format: "decimal",
+    },
+    height: 200,
+    colors: ["#1b9e77", "#d95f02", "#7570b3"],
+  };
+ 
+  var chart = new google.charts.Bar(document.getElementById("graph0"));
+
+  chart.draw(data, google.charts.Bar.convertOptions(options));
+
+  var btns = document.getElementById("btn-group");
+
+  btns.onclick = function (e) {
+    if (e.target.tagName === "BUTTON") {
+      options.hAxis.format = e.target.id === "none" ? "" : e.target.id;
+      chart.draw(data, google.charts.Bar.convertOptions(options));
+      localStorage.removeItem("graph-data");
+    }
+  };
+}
+};
 
 // creating a top 10 global playlist
 var globalTop10 = function () {
@@ -407,7 +480,7 @@ var globalTop10 = function () {
           artistName: data.content[i].artists[0],
         };
 
-        $(".topArtists").append("<div class='top" + i + "'><div>");
+        $(".topArtists").append("<div class='top" + i + " flex mt-4 pb-4'><div>");
         $(".top" + i).append(
           "<img src='" +
             top10.albumCover +
@@ -415,12 +488,13 @@ var globalTop10 = function () {
             top10.artistName +
             "'></img>"
         );
-        $(".top" + i).append(
+        $(".top"+i).append("<div class='topLeft"+i+" ml-2'></div>")
+        $(".topLeft" + i).append(
           "<h3 class='song-titile text-lg font-medium'>" +
             top10.trackName +
             "</h3>"
         );
-        $(".top" + i).append(
+        $(".topLeft" + i).append(
           "<p class='song-info mb-3'>" + top10.artistName + "</p>"
         );
       }
@@ -428,7 +502,7 @@ var globalTop10 = function () {
     .catch((err) => console.error(err));
 };
 
-// globalTop10();
+globalTop10();
 
 // save recent searches to local storage and show as buttons in history search area
 var saveRecentSearches = function (data) {
@@ -460,10 +534,11 @@ var loadSearches = function() {
     var historyContainerEl = $("<div>").addClass("history-btn-container");
 
     for (var i = 0; i < recent5Searches.length; i++) {
-      historyContainerEl.prepend("<button type='button' class='history-btn'>" + recent5Searches[i].search + "</button>");
+      $(".search-history").append("<div class='history-btn text-blue-600'>"+recent5Searches[i].search +"</div>");
+      // historyContainerEl.prepend("<button type='button' class='history-btn'>" + recent5Searches[i].search + "</button>");
     }
 
-    $(".search-history").append(historyContainerEl);
+    
   // if not, set an empty array
   } else {
     recent5Searches = [];
