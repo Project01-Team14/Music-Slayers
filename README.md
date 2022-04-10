@@ -52,9 +52,13 @@ THEN I am taken to the contact me page to put contact information.
 ### Music APIs (Deezer, Spotify, Genius)
 
 ## Screenshots
-![Picture1](https://user-images.githubusercontent.com/102547978/162610618-6acaef9a-7051-43a1-b7dc-c130d9d2d15f.png)
+![Alt text](./assets/images/Picture1.png)
+![Alt text](./assets/images/Picture2.png)
+![Alt text](./assets/images/Picture3.png)
+![Alt text](./assets/images/Picture4.png)
 
 ## Demo Clip
+https://drive.google.com/file/d/10CJZwc71IVf8r-Xi0LqVrUgjn2dlIWC6/view
 
 ## Links to Application
 
