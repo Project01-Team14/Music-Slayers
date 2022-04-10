@@ -460,10 +460,11 @@ var loadSearches = function() {
     var historyContainerEl = $("<div>").addClass("history-btn-container");
 
     for (var i = 0; i < recent5Searches.length; i++) {
-      historyContainerEl.prepend("<button type='button' class='history-btn'>" + recent5Searches[i].search + "</button>");
+      $(".search-history").append("<div class='history-btn text-blue-600'>"+recent5Searches[i].search +"</div>");
+      // historyContainerEl.prepend("<button type='button' class='history-btn'>" + recent5Searches[i].search + "</button>");
     }
 
-    $(".search-history").append(historyContainerEl);
+    
   // if not, set an empty array
   } else {
     recent5Searches = [];
