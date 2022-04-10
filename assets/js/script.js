@@ -141,9 +141,9 @@ var getSearch = function (searchCriteria) {
 // search by "Songs"
 var createSongList = function (response) {
   // dought here ///////
-  if ($(".song-list") !== null) {
-    $(".song-list").detach();
-  }
+  // if ($(".song-list") !== null) {
+  //   $(".song-list").detach();
+  // }
 
   $(".main").append("<div class='remove'></div>")
 
@@ -593,13 +593,24 @@ var loadSearches = function() {
 loadSearches();
 
 $(".search-history").on("click", ".history-btn", function() {
+  var searchCriteria = $(this).text().trim();
   recent5Searches = JSON.parse(localStorage.getItem("mostRecentSearch"));
 
-  var searchCriteria = $(this).text().trim();
-  console.log(searchCriteria);
   for (var i = 0; i < recent5Searches.length; i++) {
     if (recent5Searches[i].search === searchCriteria) {
-      createSongList
+      $(".remove").remove();
+      
+      // dought here ///////
+      // if ($(".song-list") !== null) {
+      //   $(".song-list").detach();
+      // }
+      
+      $(".main").append("<div class='remove'></div>")
+
+      for (var item = 0; item < recent5Searches[i].result.length; item++) {
+        resultData = recent5Searches[i].result[item];
+        createSongListElements(resultData,item);  
+      }
     }
   }
 })
