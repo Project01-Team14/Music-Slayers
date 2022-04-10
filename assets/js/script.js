@@ -438,7 +438,7 @@ function drawChart() {
     colors: ["#1b9e77", "#d95f02", "#7570b3"],
   };
  
-  var chart = new google.charts.Bar(document.getElementById("graph0"));
+  var chart = new google.charts.Bar(document.getElementById("graph"+trackIndex));
 
   chart.draw(data, google.charts.Bar.convertOptions(options));
 
