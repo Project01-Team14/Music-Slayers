@@ -49,7 +49,7 @@ THEN I am taken to the contact me page to put contact information.
 ### Music APIs (Deezer, Spotify, Genius)
 
 ## Screenshots
-C:\Users\hp\Desktop\projects\Music-Slayers-Project01\assets\images\Picture1.png
+![Picture1](https://user-images.githubusercontent.com/102547978/162610618-6acaef9a-7051-43a1-b7dc-c130d9d2d15f.png)
 
 ## Demo Clip
 
