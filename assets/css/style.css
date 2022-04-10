@@ -4,9 +4,6 @@ body {
   line-height: 1;
 }
 
-@media screen and (max-width:575px) {
-  .history{
-    width:30%;
-
-  }
+.frontLeft {
+  height:1295px;
 }
