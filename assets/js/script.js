@@ -11,13 +11,13 @@ var recent5Searches = [];
 var spotifyKey = "e1574ce24bmshb618600d41a7010p1ec78ejsn0dc9ca4741c2";
 
 ///////////////////////////////////////////////////////front page//////////////////////////////////////////////
-$(".main").append("<div class='remove'></div>")
-  var genreList = function (title,data,id){
-  
-    $(".remove").append("<h2 class='p-4' id='result-subtitle'>"+title+"</h2>")
-    $(".remove").append("<div class='list"+id+" flex space-x-5 p-3 overflow-scroll'></div>" );
-    for (var i = 0; i < 7; i++) {
-    $(".list"+id).append("<img class ='h-32 w-32 'src='https://e-cdns-images.dzcdn.net/images/cover/"+data.tracks.data[i].album.md5_image+"/250x250-000000-80-0-0.jpg' alt=''></img>");
+$(".main").append("<div class='remove'></div>");
+var genreList = function (title,data,id) {
+  $(".remove").append("<h2 class='p-4' id='result-subtitle'>"+title+"</h2>");
+  $(".remove").append("<div class='list"+id+" flex space-x-5 p-3 overflow-scroll'></div>");
+
+  for (var i = 0; i < 7; i++) {
+    $(".list"+id).append("<img class ='h-32 w-32 'src='https://e-cdns-images.dzcdn.net/images/cover/"+data.tracks.data[i].album.md5_image+"/250x250-000000-80-0-0.jpg' alt='' data-track-name='" + data.tracks.data[i].title + "'></img>");
   }
 }
 
@@ -104,12 +104,12 @@ $( document ).ready(function() {
       },
     })
     .then((response) => response.json())
-      .then(function (data) {
-        var title = "Sports music";
-        var id = "sports";
-        console.log(data);
-        genreList(title,data,id);
-      })
+    .then(function (data) {
+      var title = "Sports music";
+      var id = "sports";
+      console.log(data);
+      genreList(title,data,id);
+    })
     .catch((err) => console.error(err));
 });
 
@@ -230,7 +230,7 @@ var createSongListElements = function (data,i) {
   $(".songMainRight"+i).append("<h3 class='song-title text-lg font-bold'>"+data.trackName+"<h3>");
   $(".songMainRight"+i).append("<p class='song-info'>Artist name:  "+data.artistName+"</p>");
   $(".songMainRight"+i).append("<p class='song-info'>Album name:  "+data.albumName+"</p>")
-  $(".songMainRight"+i).append("<div class='buttons justify-end flex mt-3 '></div>")
+  $(".songMainRight"+i).append("<div class='buttons justify-end flex mt-3 '></div>");
   $(".songMainRight"+i).append("<button trackIndex='"+i+"' trackInsert='lyricsLines"+i+"' trackId='"+data.trackUri+"' class='lyrics-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Lyrics</button>");
   // $(".remove").append("<a href=./display-lyrics.html?track=" + data.trackName ") 
   $(".songMainRight"+i).append("<button playability='"+data.playability+"' trackId='"+data.trackUri+"' trackIndex='"+i+"' class='play-btn play"+i+" ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Play</button>");
@@ -356,14 +356,14 @@ $("#display-container").on("click", ".lyrics-btn", function () {
   console.log("Append data is " + trackApend);
   console.log(trackId);
   // getLyrics(trackId);
-  $(".songContain"+trackIndex).append("<p class='"+trackApend+" h-64 overflow-auto'></p>")
+  $(".songContain"+trackIndex).append("<p class='"+trackApend+" h-64 overflow-auto'></p>");
   const options = {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
       "X-RapidAPI-Key": "1580afc537msh1a6caff87fc91b8p17ece1jsn2c0754e91a4b",
     },
-  };
+  }
 
   fetch("https://spotify23.p.rapidapi.com/track_lyrics/?id=" + trackId, options)
     .then((response) => response.json())
@@ -377,7 +377,7 @@ $("#display-container").on("click", ".lyrics-btn", function () {
           line: lyricsLine,
         };
         
-        $("."+trackApend).append("<strong>"+line+"</strong>")
+        $("."+trackApend).append("<strong>"+line+"</strong>");
         lyricsData.push(tempArr);
       }
       console.log(lyricsData);
@@ -528,8 +528,8 @@ var globalTop10 = function () {
           trackUri: data.content[i].track_url,
           albumCover: data.content[i].thumbnail,
           artistName: data.content[i].artists[0],
-        };
-        $(".topArtists").append("<div class='top"+i+"'><div>")
+        }
+        $(".topArtists").append("<div class='top"+i+"'><div>");
         $(".top"+i).append("<img src='"+top10.albumCover+"' alt ='"+top10.artistName+"'></img>");
         $(".top"+i).append("<h3 class='song-titile text-lg font-medium'>"+top10.trackName+"</h3>");
         $(".top"+i).append("<p class='song-info mb-3'>"+top10.artistName+"</p>");
@@ -605,7 +605,7 @@ $(".search-history").on("click", ".history-btn", function() {
       //   $(".song-list").detach();
       // }
       
-      $(".main").append("<div class='remove'></div>")
+      $(".main").append("<div class='remove'></div>");
 
       for (var item = 0; item < recent5Searches[i].result.length; item++) {
         resultData = recent5Searches[i].result[item];
@@ -613,4 +613,10 @@ $(".search-history").on("click", ".history-btn", function() {
       }
     }
   }
-})
+});
+
+$("#display-container").on("click", "img", function () {
+  searchCriteria = $(this).attr("data-track-name")
+  $(".remove").remove();
+  getSearch(searchCriteria);
+});
