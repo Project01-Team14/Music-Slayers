@@ -15,7 +15,7 @@ var genreList = function (title,data,id) {
   for (var i = 0; i < 7; i++) {
     $(".list" + id).append("<img class ='h-32 w-32 'src='https://e-cdns-images.dzcdn.net/images/cover/" + data.tracks.data[i].album.md5_image + "/250x250-000000-80-0-0.jpg' alt='' data-track-name='" + data.tracks.data[i].title + "'></img>");
   }
-};
+}
 
 var frontPage = function () {
   $(".main").append("<div class='remove'></div>");
@@ -27,71 +27,82 @@ var frontPage = function () {
     },
   })
     .then((response) => response.json())
-    .then(function (data) {
+     .then(function (data) {
       var title = "Pop music";
       var id = "pop";
       genreList(title, data, id);
     })
     .catch((err) => console.error(err));
 
-  fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/8053794282", {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
-    },
-  })
-    .then((response) => response.json())
-    .then(function (data) {
-      var title = "Classic Songs";
-      var id = "classic";
-      genreList(title, data, id);
+  fetch(
+    "https://deezerdevs-deezer.p.rapidapi.com/playlist/8053794282", {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+        "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
+      },
     })
+    .then((response) => response.json())
+      .then(function (data) {
+        var title = "Classic Songs";
+        var id = "classic";
+        console.log(data);
+        genreList(title,data,id);
+      })
     .catch((err) => console.error(err));
 
-  fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/1615514485", {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
-    },
-  })
-    .then((response) => response.json())
-    .then(function (data) {
-      var title = "Jazz Music";
-      var id = "jazz";
-      genreList(title, data, id);
+  fetch(
+    "https://deezerdevs-deezer.p.rapidapi.com/playlist/1615514485",
+    {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+        "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
+      },
     })
+    .then((response) => response.json())
+      .then(function (data) {
+        var title = "Jazz Music";
+        var id = "jazz";
+        console.log(data);
+        genreList(title,data,id);
+      })
     .catch((err) => console.error(err));
 
-  fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/914651125", {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
-    },
-  })
-    .then((response) => response.json())
-    .then(function (data) {
-      var title = "Chill and relax";
-      var id = "chill";
-      genreList(title, data, id);
+  fetch(
+    "https://deezerdevs-deezer.p.rapidapi.com/playlist/914651125",
+    {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+        "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
+      },
     })
+    .then((response) => response.json())
+      .then(function (data) {
+        var title = "Chill and relax";
+        var id = "chill";
+        console.log(data);
+        genreList(title,data,id);
+      })
     .catch((err) => console.error(err));
 
-  fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/1154685481", {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
-      "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
-    },
-  })
-    .then((response) => response.json())
-    .then(function (data) {
-      var title = "Sports music";
-      var id = "sports";
-      genreList(title, data, id);
+  fetch(
+    "https://deezerdevs-deezer.p.rapidapi.com/playlist/1154685481",
+    {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
+        "X-RapidAPI-Key": "6c661726cemsh8e0e6330646001dp18ca72jsndcad811f5f1d",
+      },
     })
+    .then((response) => response.json())
+      .then(function (data) {
+        var title = "Sports music";
+        var id = "sports";
+        console.log(data);
+        genreList(title,data,id);
+      })
     .catch((err) => console.error(err));
 }
 frontPage();
@@ -107,9 +118,7 @@ var getSearch = function (searchCriteria) {
   };
 
   fetch(
-    "https://spotify23.p.rapidapi.com/search/?q=" +
-      searchCriteria +
-      "&type=multi&offset=0&limit=10&numberOfTopResults=5",
+    "https://spotify23.p.rapidapi.com/search/?q=" + searchCriteria + "&type=multi&offset=0&limit=10&numberOfTopResults=5",
     options
   )
     .then((response) => response.json())
@@ -120,7 +129,7 @@ var getSearch = function (searchCriteria) {
     .catch((err) => console.error(err));
 };
 
-// search by "Songs"
+// create song list and show it on result area
 var createSongList = function (response) {
   $(".main").append("<div class='remove '></div>");
   $(".remove").append(
@@ -130,7 +139,7 @@ var createSongList = function (response) {
   var tempArr = {
     search: searchCriteria,
     result: [],
-  };
+  }
 
   for (var i = 0; i < 10; i++) {
     data = response.tracks.items[i].data;
@@ -154,8 +163,8 @@ var createSongList = function (response) {
   saveRecentSearches(recent5Searches);
 };
 
-var createSongListElements = function (data, i) {
-  $(".remove").append("<div class='songContain" + i + " p-3 ' ></div>");
+var createSongListElements = function (data,i) {
+  $(".remove").append("<div class='songContain" + i + " p-3 ' ></div>")
 
   $(".songContain" + i).append(
     "<div class='songMain" + i + " flex p-3'></div>"
@@ -287,30 +296,30 @@ $("#display-container").on("click", ".lyrics-btn", function () {
   $(".songContain" + trackIndex).append(
     "<p class='" + trackApend + " h-64 overflow-auto lyricsRemove'></p>"
   );
+  
   const options = {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      "X-RapidAPI-Key": "1580afc537msh1a6caff87fc91b8p17ece1jsn2c0754e91a4b",
+      "X-RapidAPI-Key": spotifyKey,
     },
-  };
+  }
 
   fetch("https://spotify23.p.rapidapi.com/track_lyrics/?id=" + trackId, options)
     .then((response) => response.json())
-    .then(function (data) {
+    .then(function (data) {       
       var lyricsData = [];
-
+      
       for (var i = 0; i < data.lyrics.lines.length; i++) {
         var lyricsLine = data.lyrics.lines[i].words;
         var line = JSON.stringify(lyricsLine);
         var tempArr = {
           line: lyricsLine,
         };
-
+        
         $("." + trackApend).append("<strong>" + line + "</strong>");
         lyricsData.push(tempArr);
       }
-
       //store the lyrics data into local storage
       localStorage.setItem("Lyrics", JSON.stringify(lyricsData));
     })
@@ -369,25 +378,22 @@ $("#display-container").on("click", ".country-btn", function (event) {
 var graphBar = function (trackApend, trackIndex) {
   $(".lyricsRemove").remove();
   $(".songContain" + trackIndex).append(
-    "<div class='graph" +
-      trackApend +
-      "  h-64 overflow-auto lyricsRemove'  id='graph" +
-      trackIndex +
-      "'></div>"
+    "<div class='graph" + trackApend + "  h-64 overflow-auto lyricsRemove'  id='graph"+trackIndex + "'></div>"
   );
   var graphData = JSON.parse(localStorage.getItem("graph-data"));
 
   var city1 = graphData[0].city;
-  var listenersByCity1 = graphData[0].numbers;
+var listenersByCity1 = graphData[0].numbers;
 
-  var city2 = graphData[1].city;
-  var listenersByCity2 = graphData[1].numbers;
+var city2 = graphData[1].city;
+var listenersByCity2 = graphData[1].numbers;
 
-  var city3 = graphData[2].city;
-  var listenersByCity3 = graphData[2].numbers;
+var city3 = graphData[2].city;
+var listenersByCity3 = graphData[2].numbers;
 
-  var artistName = graphData[1].artist;
+var artistName = graphData[1].artist;
 
+// graph logic to show monthly listeners
   google.charts.load("current", {
     packages: ["bar"],
   });
@@ -414,18 +420,18 @@ var graphBar = function (trackApend, trackIndex) {
 
     var chart = new google.charts.Bar(document.getElementById("graph"+trackIndex));
 
-    chart.draw(data, google.charts.Bar.convertOptions(options));
+  chart.draw(data, google.charts.Bar.convertOptions(options));
 
-    var btns = document.getElementById("btn-group");
+  var btns = document.getElementById("btn-group");
 
-    btns.onclick = function (e) {
-      if (e.target.tagName === "BUTTON") {
-        options.hAxis.format = e.target.id === "none" ? "" : e.target.id;
-        chart.draw(data, google.charts.Bar.convertOptions(options));
-        localStorage.removeItem("graph-data");
-      }
-    };
-  }
+  btns.onclick = function (e) {
+    if (e.target.tagName === "BUTTON") {
+      options.hAxis.format = e.target.id === "none" ? "" : e.target.id;
+      chart.draw(data, google.charts.Bar.convertOptions(options));
+      localStorage.removeItem("graph-data");
+    }
+  };
+}
 };
 
 // creating a top 10 global playlist
@@ -452,9 +458,7 @@ var globalTop10 = function () {
           artistName: data.content[i].artists[0],
         };
 
-        $(".topArtists").append(
-          "<div class='top" + i + " flex mt-4 pb-4'><div>"
-        );
+        $(".topArtists").append("<div class='top" + i + " flex mt-4 pb-4'><div>");
         $(".top" + i).append(
           "<img src='" +
             top10.albumCover +
@@ -462,7 +466,7 @@ var globalTop10 = function () {
             top10.artistName +
             "'></img>"
         );
-        $(".top" + i).append("<div class='topLeft" + i + " ml-2'></div>");
+        $(".top"+i).append("<div class='topLeft"+i+" ml-2'></div>")
         $(".topLeft" + i).append(
           "<h3 class='song-titile text-lg font-medium'>" +
             top10.trackName +
@@ -517,7 +521,7 @@ var loadSearches = function () {
   } else {
     recent5Searches = [];
   }
-};
+}
 
 loadSearches();
 
