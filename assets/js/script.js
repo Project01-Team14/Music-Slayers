@@ -170,16 +170,67 @@ var createSongListElements = function (data,i) {
     "<div class='songMain" + i + " flex p-3'></div>"
   );
 
-  $(".songMainLeft" + i).append("<img class='h-40 w-40' src='"+data.albumCover+"' alt='"+data.artistName + "'s album " + data.albumName+"'></img>");
+  $(".songMain" + i).append("<div class='songMainLeft" + i + " '></div>");
+  $(".songMain" + i).append(
+    "<div class='songMainRight" + i + " pl-3 flex-1'></div>"
+  );
 
-  $(".songMainRight"+i).append("<h3 class='song-title text-lg font-bold'>"+data.trackName+"<h3>");
-  $(".songMainRight"+i).append("<p class='song-info'>Artist name:  "+data.artistName+"</p>");
-  $(".songMainRight"+i).append("<p class='song-info'>Album name:  "+data.albumName+"</p>")
-  $(".songMainRight"+i).append("<div class='buttons justify-end flex mt-3 '></div>")
-  $(".songMainRight"+i).append("<button trackIndex='"+i+"' trackInsert='lyricsLines"+i+"' trackId='"+data.trackUri+"' class='lyrics-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Lyrics</button>");
-  // $(".remove").append("<a href=./display-lyrics.html?track=" + data.trackName ") 
-  $(".songMainRight"+i).append("<button playability='"+data.playability+"' trackId='"+data.trackUri+"' trackIndex='"+i+"' class='play-btn play"+i+" ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Play</button>");
-  $(".songMainRight"+i).append("<button  trackIndex='"+i+"' trackInsert='lyricsLines"+i+"' artistId='"+data.artistUri+"' class='country-btn ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>"+"Followers"+"</button>");
+  $(".songMainLeft" + i).append(
+    "<img class='h-40 w-40' src='" +
+      data.albumCover +
+      "' alt='" +
+      data.artistName +
+      "'s album " +
+      data.albumName +
+      "'></img>"
+  );
+
+  // var listItemEl = $("<li>").addClass("song-item");
+
+  $(".songMainRight" + i).append(
+    "<h3 class='song-title text-lg font-bold'>" + data.trackName + "<h3>"
+  );
+  $(".songMainRight" + i).append(
+    "<p class='song-info'>Artist name:  " + data.artistName + "</p>"
+  );
+  $(".songMainRight" + i).append(
+    "<p class='song-info'>Album name:  " + data.albumName + "</p>"
+  );
+  $(".songMainRight" + i).append(
+    "<div class='buttons justify-end flex mt-3 '></div>"
+  );
+  $(".songMainRight" + i).append(
+    "<button trackIndex='" +
+      i +
+      "' trackInsert='lyricsLines" +
+      i +
+      "' trackId='" +
+      data.trackUri +
+      "' class='lyrics-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Lyrics</button>"
+  );
+  // $(".remove").append("<a href=./display-lyrics.html?track=" + data.trackName ")
+  $(".songMainRight" + i).append(
+    "<button playability='" +
+      data.playability +
+      "' trackId='" +
+      data.trackUri +
+      "' trackIndex='" +
+      i +
+      "' class='play-btn play" +
+      i +
+      " ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>Play</button>"
+  );
+  $(".songMainRight" + i).append(
+    "<button  trackIndex='" +
+      i +
+      "' trackInsert='lyricsLines" +
+      i +
+      "' artistId='" +
+      data.artistUri +
+      "' class='country-btn ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full'>" +
+      "Followers" +
+      "</button>"
+  );
 };
 
 //Add event listener button
@@ -258,20 +309,28 @@ $("#display-container").on("click", ".lyrics-btn", function () {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      "X-RapidAPI-Key": "1580afc537msh1a6caff87fc91b8p17ece1jsn2c0754e91a4b",
+      "X-RapidAPI-Key": spotifyKey,
     },
   }
 
   fetch("https://spotify23.p.rapidapi.com/track_lyrics/?id=" + trackId, options)
     .then((response) => response.json())
     .then(function (data) {       
+      var lyricsData = [];
+      
       for (var i = 0; i < data.lyrics.lines.length; i++) {
         var lyricsLine = data.lyrics.lines[i].words;
         var line = JSON.stringify(lyricsLine);
+        var tempArr = {
+          line: lyricsLine,
+        };
         
         $("." + trackApend).append("<strong>" + line + "</strong>");
         lyricsData.push(tempArr);
       }
+      
+      //store the lyrics data into local storage
+      localStorage.setItem("Lyrics", JSON.stringify(lyricsData));
     })
     // if error show the error
     .catch((err) => console.error(err));
