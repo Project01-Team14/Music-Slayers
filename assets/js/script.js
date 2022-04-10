@@ -457,13 +457,13 @@ var loadSearches = function() {
   
   // if there is data in localStorage, create search history button
   if (recent5Searches) {
-    var historyContainerEl = $("<div>").addClass("history-btn-container");
+    var historyContainerEl = $("<div>").addClass("history-btn-container flex flex-col space-y-0.5 my-4");
 
     for (var i = 0; i < recent5Searches.length; i++) {
-      $(".search-history").append("<div class='history-btn text-blue-600'>"+recent5Searches[i].search +"</div>");
-      // historyContainerEl.prepend("<button type='button' class='history-btn'>" + recent5Searches[i].search + "</button>");
+      historyContainerEl.prepend("<button type='button' class='history-btn bg-cyan-500 hover:bg-blue-700 text-white py-1 rounded-full'>" + recent5Searches[i].search + "</button>");
     }
 
+    $(".search-history").append(historyContainerEl);
     
   // if not, set an empty array
   } else {
