@@ -8,22 +8,17 @@ var recent5Searches = [];
 var spotifyKey = "fa06e9e5f6msh6017d59f2cbd573p1e1089jsnc05d29dcf8d8";
 
 ///////////////////////////////////////////////////////front page//////////////////////////////////////////////
-$(".main").append("<div class='remove'></div>");
-
 var genreList = function (title,data,id) {
   $(".remove").append("<h2 class='p-4' id='result-subtitle'>" + title + "</h2>");
   $(".remove").append("<div class='list" + id + " flex space-x-5 p-3 overflow-scroll'></div>");
 
   for (var i = 0; i < 7; i++) {
-    $(".list" + id).append(
-      "<img class ='h-32 w-32 'src='https://e-cdns-images.dzcdn.net/images/cover/" +
-        data.tracks.data[i].album.md5_image +
-        "/250x250-000000-80-0-0.jpg' alt=''></img>"
-    );
+    $(".list" + id).append("<img class ='h-32 w-32 'src='https://e-cdns-images.dzcdn.net/images/cover/" + data.tracks.data[i].album.md5_image + "/250x250-000000-80-0-0.jpg' alt='' data-track-name='" + data.tracks.data[i].title + "'></img>");
   }
 };
 
-$(document).ready(function () {
+var frontPage = function () {
+  $(".main").append("<div class='remove'></div>");
   fetch("https://deezerdevs-deezer.p.rapidapi.com/playlist/7277496744", {
     method: "GET",
     headers: {
@@ -98,8 +93,8 @@ $(document).ready(function () {
       genreList(title, data, id);
     })
     .catch((err) => console.error(err));
-});
-
+}
+frontPage();
 /////////////////////////////////////////////////////////Second page/////////////////////////////////////////////////////
 // fetch data from spotify
 var getSearch = function (searchCriteria) {
@@ -227,7 +222,7 @@ var createSongListElements = function (data, i) {
   );
 };
 
-//Add event listener button
+// Add event listener button
 buttonEl.addEventListener("click", function (event) {
   event.preventDefault();
   $(".remove").remove();
@@ -326,12 +321,14 @@ $("#display-container").on("click", ".lyrics-btn", function () {
 // displaying cities by users
 $("#display-container").on("click", ".country-btn", function (event) {
   var artistId = $(this).attr("artistId").substr(15);
-
+  var trackApend = $(this).attr("trackInsert");
+  var trackIndex = $(this).attr("trackIndex");
+  console.log(artistId);
   const options = {
     method: "GET",
     headers: {
       "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
-      "X-RapidAPI-Key": spotifyKey,
+      "X-RapidAPI-Key":spotifyKey,
     },
   };
 
@@ -341,24 +338,29 @@ $("#display-container").on("click", ".country-btn", function (event) {
   )
     .then((response) => response.json())
     .then(function (data) {
+      console.log(data);
       var topCities = data.data.artist.stats.topCities;
       var citiesUsers = [];
+      console.log(citiesUsers);
 
       for (var i = 0; i < 3; i++) {
         var numberOfListeners = topCities.items[i].numberOfListeners;
         var listenersByCity = topCities.items[i].city;
         var artistName = data.data.artist.profile.name;
+        console.log(artistName);
         var tempArr = {
           numbers: numberOfListeners,
           city: listenersByCity,
           artist: artistName,
         };
-
+        console.log(tempArr);
         citiesUsers.push(tempArr);
       }
 
       localStorage.setItem("graph-data", JSON.stringify(citiesUsers));
-      graphBar(trackApend, trackIndex);
+      graphBar(trackApend,trackIndex);
+      console.log(JSON.parse(localStorage.getItem("graph-data")));
+      console.log(citiesUsers);
     })
     .catch((err) => console.error(err));
 });
@@ -410,7 +412,7 @@ var graphBar = function (trackApend, trackIndex) {
       colors: ["#1b9e77", "#d95f02", "#7570b3"],
     };
 
-    var chart = new google.charts.Bar(document.getElementById("graph0"));
+    var chart = new google.charts.Bar(document.getElementById("graph"+trackIndex));
 
     chart.draw(data, google.charts.Bar.convertOptions(options));
 
@@ -476,17 +478,18 @@ var globalTop10 = function () {
 
 globalTop10();
 
-// local storage
+// save recent searches to local storage and show as buttons in history search area
 var saveRecentSearches = function (data) {
-  // create button elements in recent history area until it reaches five
+  // remove the history button container, if it's there
   $(".history-btn-container").remove();
 
+  // if the searches are done more than 6 times, create a new array with the latest 5 searches
   if (data.length >= 6) {
     recent5Searches = [];
 
     for (var i = 1; i < 6; i++) {
       console.log(recent5Searches);
-      recent5Searches.push(data[i]);
+      recent5Searches.push(data[i]);  
     }
     console.log(recent5Searches);
   }
@@ -496,9 +499,11 @@ var saveRecentSearches = function (data) {
   loadSearches();
 };
 
+// create button elements of recent searches
 var loadSearches = function () {
   recent5Searches = JSON.parse(localStorage.getItem("mostRecentSearch"));
 
+  // if there is data in localStorage, create search history button
   if (recent5Searches) {
     var historyContainerEl = $("<div>").addClass("history-btn-container flex flex-col space-y-0.5 my-4");
 
@@ -516,10 +521,14 @@ var loadSearches = function () {
 
 loadSearches();
 
-$(".search-history").on("click", ".history-btn", function () {
+// when clicked history search button, show its song list result
+$(".search-history").on("click", ".history-btn", function() {
+  // get search criteria from the button's text
   var searchCriteria = $(this).text().trim();
+  // get search result from local storage
   recent5Searches = JSON.parse(localStorage.getItem("mostRecentSearch"));
 
+  // look for the search criteria in the local storage and show list of the matched one
   for (var i = 0; i < recent5Searches.length; i++) {
     if (recent5Searches[i].search === searchCriteria) {
       $(".remove").remove();
@@ -527,8 +536,18 @@ $(".search-history").on("click", ".history-btn", function () {
 
       for (var item = 0; item < recent5Searches[i].result.length; item++) {
         resultData = recent5Searches[i].result[item];
-        createSongListElements(resultData, item);
+        createSongListElements(resultData,item);  
       }
     }
   }
+});
+
+// if clicked on the image of the first loaded screen, shows song list of its track name
+$("#display-container").on("click", "img", function () {
+  // get search criteria from image's attribute
+  searchCriteria = $(this).attr("data-track-name");
+  
+  // fetch song data and show its list
+  $(".remove").remove();
+  getSearch(searchCriteria);
 });
