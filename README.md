@@ -6,6 +6,9 @@ It has a unique feature to display lyrics of selected songs and also top 10 musi
 
 Users will have access to view a graph representing the artist’s information about the highest number of listeners from different cities around the world. This is what makes this application unique and attract more users.
 
+## Important 
+The API keys used for this application have limited number of fetch request. If you get an error showing 'Reached maximum fetch capacity' then please create and use your own spotify key. 
+
 ## Motivation for development
 
 As music is loved by everyone, we came up with an idea of creating a music application for the users to easily access the music with songs lyrics, albums and  their associated artist information.
