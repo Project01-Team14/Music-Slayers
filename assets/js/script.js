@@ -386,7 +386,6 @@ var graphBar = function (trackApend, trackIndex) {
 
   var artistName = graphData[1].artist;
 
-  // graph logic to show monthly listeners
   google.charts.load("current", {
     packages: ["bar"],
   });
